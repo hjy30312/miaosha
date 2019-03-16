@@ -1,0 +1,47 @@
+package com.hjy.miaosha.controller;
+
+
+import com.hjy.miaosha.result.CodeMsg;
+import com.hjy.miaosha.result.Result;
+import com.hjy.miaosha.service.UserService;
+import com.hjy.miaosha.vo.LoginVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.validation.Valid;
+
+
+@Controller
+@RequestMapping("/login")
+public class LoginController {
+
+    private static Logger logger = LoggerFactory.getLogger(LoginController.class);
+
+    @Autowired
+    UserService userService;
+
+    @RequestMapping("/to_login")
+    public String toLogin(){
+        return "login";
+    }
+
+    @RequestMapping("do_login")
+    @ResponseBody
+    public Result<Boolean> doLogin(@Valid LoginVo loginVo) {
+        logger.info(loginVo.toString());
+        CodeMsg codeMsg = userService.login(loginVo);
+        if (codeMsg.getCode() == 0) {
+            return Result.success(true);
+        } else {
+            return Result.error(codeMsg);
+        }
+    }
+
+
+
+
+}
