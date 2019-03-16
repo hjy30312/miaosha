@@ -28,7 +28,7 @@ public class IsMobileValidator implements ConstraintValidator<IsMobile, String> 
 		if(required) {
 			return ValidatorUtil.isMobile(value);
 		} else {
-		//2.2 若不必须就判断是否有值
+		//2.2 若不必须就判断是否有值2
 			if(StringUtils.isEmpty(value)) {
 				return true;
 			}else {
