@@ -33,12 +33,8 @@ public class LoginController {
     @ResponseBody
     public Result<Boolean> doLogin(@Valid LoginVo loginVo) {
         logger.info(loginVo.toString());
-        CodeMsg codeMsg = userService.login(loginVo);
-        if (codeMsg.getCode() == 0) {
-            return Result.success(true);
-        } else {
-            return Result.error(codeMsg);
-        }
+        userService.login(loginVo);
+        return Result.success(true);
     }
 
 

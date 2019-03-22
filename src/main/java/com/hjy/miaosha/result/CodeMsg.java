@@ -23,17 +23,38 @@ public class CodeMsg {
 	//订单模块 5004XX
 	
 	//秒杀模块 5005XX
-	
-	
+
+	/**
+	 * 填充的msg  变参
+	 * @param args
+	 * @return
+	 */
+	public CodeMsg fillArgs(Object... args) {
+		int code = this.code;
+		String message =String.format(this.msg,args);
+		return new CodeMsg(code,message);
+	}
+
+
+
 	private CodeMsg(int code, String msg) {
 		this.code = code;
 		this.msg = msg;
 	}
-	
+
 	public int getCode() {
 		return code;
 	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
+
 	public String getMsg() {
 		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 }
