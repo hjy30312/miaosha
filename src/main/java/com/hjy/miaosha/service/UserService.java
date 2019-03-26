@@ -5,9 +5,11 @@ import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.exception.GlobalException;
 import com.hjy.miaosha.result.CodeMsg;
 import com.hjy.miaosha.utils.MD5Util;
+import com.hjy.miaosha.utils.UUIDUtil;
 import com.hjy.miaosha.vo.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.plugin.util.UIUtil;
 
 
 @Service
@@ -15,6 +17,9 @@ public class UserService {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    RedisService redisService;
 
 
     public User getById(long id) {
@@ -39,6 +44,10 @@ public class UserService {
         if (!calcPass.equals(dbPass)) {
             throw  new GlobalException(CodeMsg.PASSWORD_ERROR);
         }
+
+
+        //生成cookie
+        String token = UUIDUtil.uuid();
 
         return true;
     }
