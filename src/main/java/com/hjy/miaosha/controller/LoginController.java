@@ -1,7 +1,5 @@
 package com.hjy.miaosha.controller;
 
-
-import com.hjy.miaosha.result.CodeMsg;
 import com.hjy.miaosha.result.Result;
 import com.hjy.miaosha.service.UserService;
 import com.hjy.miaosha.vo.LoginVo;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
@@ -31,13 +30,9 @@ public class LoginController {
 
     @RequestMapping("do_login")
     @ResponseBody
-    public Result<Boolean> doLogin(@Valid LoginVo loginVo) {
+    public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
         logger.info(loginVo.toString());
-        userService.login(loginVo);
+        userService.login(response,loginVo);
         return Result.success(true);
     }
-
-
-
-
 }
