@@ -52,8 +52,25 @@ public class UserService {
             throw  new GlobalException(CodeMsg.PASSWORD_ERROR);
         }
 
-
         //生成cookie
+        addCookie(response,user);
+        return true;
+    }
+
+    public User getByToken(HttpServletResponse response,String token) {
+        if (StringUtils.isEmpty(token)) {
+            return null;
+        }
+        User user = redisService.get(MiaoshaUserKey.token,token,User.class);
+        //延长有效区
+        if (user!=null) {
+            addCookie(response, user);
+        }
+        return user;
+    }
+
+
+    private void addCookie(HttpServletResponse response,User user) {
         String token = UUIDUtil.uuid();
         redisService.set(MiaoshaUserKey.token,token,user);
         Cookie cookie = new Cookie(COOKI_NAME_TOKEN,token);
@@ -61,13 +78,5 @@ public class UserService {
         //设置到根目录
         cookie.setPath("/");
         response.addCookie(cookie);
-        return true;
-    }
-
-    public User getByToken(String token) {
-        if (StringUtils.isEmpty(token)) {
-            return null;
-        }
-        return redisService.get(MiaoshaUserKey.token,token,User.class);
     }
 }
