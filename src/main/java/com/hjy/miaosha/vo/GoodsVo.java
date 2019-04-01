@@ -4,10 +4,33 @@ import com.hjy.miaosha.domain.Goods;
 
 import java.util.Date;
 
-public class GoodsVO extends Goods {
+public class GoodsVo extends Goods {
+
     private Integer stockCount;
+    private Double miaoshaPrice;
     private Date startDate;
     private Date endDate;
+
+    @Override
+    public String toString() {
+        return "GoodsVo{" +
+                "stockCount=" + stockCount +
+                ", miaoshaPrice=" + miaoshaPrice +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
+    }
+
+    public GoodsVo() {
+    }
+
+    public Double getMiaoshaPrice() {
+        return miaoshaPrice;
+    }
+
+    public void setMiaoshaPrice(Double miaoshaPrice) {
+        this.miaoshaPrice = miaoshaPrice;
+    }
 
     public Integer getStockCount() {
         return stockCount;
