@@ -7,7 +7,7 @@ public class Goods {
     private String goodsImg;
     private String goodsDetail;
     private Double goodsPrice;
-    private Double goodsStock;
+    private Integer goodsStock;
 
     public Goods() {
     }
@@ -73,11 +73,11 @@ public class Goods {
         this.goodsPrice = goodsPrice;
     }
 
-    public Double getGoodsStock() {
+    public Integer getGoodsStock() {
         return goodsStock;
     }
 
-    public void setGoodsStock(Double goodsStock) {
+    public void setGoodsStock(Integer goodsStock) {
         this.goodsStock = goodsStock;
     }
 }
