@@ -53,6 +53,14 @@ CREATE TABLE `order_info`(
 
 
 
+CREATE TABLE `miaosha_order`(
+                              `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+                              `user_id` bigint(20) DEFAULT NULL COMMENT '用户id',
+                              `goods_id` bigint(20) DEFAULT NULL COMMENT '商品id',
+                              `order_id` bigint(20) DEFAULT NULL COMMENT'订单id',
+                              PRIMARY KEY(`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+
 
 
 
