@@ -1,5 +1,8 @@
 package com.hjy.miaosha.domain;
 
+/**
+ * 商品
+ */
 public class Goods {
     private Long id;
     private String goodsName;

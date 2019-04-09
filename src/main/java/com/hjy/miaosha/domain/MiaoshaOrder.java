@@ -1,5 +1,8 @@
 package com.hjy.miaosha.domain;
 
+/**
+ * 秒杀订单
+ */
 public class MiaoshaOrder {
     private Long id;
     private Long userId;

@@ -1,6 +1,5 @@
 package com.hjy.miaosha.result;
 
-import com.sun.org.apache.bcel.internal.classfile.Code;
 
 public class CodeMsg {
 	private int code;

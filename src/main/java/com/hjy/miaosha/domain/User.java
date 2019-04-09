@@ -2,6 +2,9 @@ package com.hjy.miaosha.domain;
 
 import java.util.Date;
 
+/**
+ * 用户
+ */
 public class User {
 
 

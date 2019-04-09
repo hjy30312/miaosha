@@ -4,6 +4,9 @@ import com.hjy.miaosha.domain.Goods;
 
 import java.util.Date;
 
+/**
+ * 商品信息
+ */
 public class GoodsVo extends Goods {
 
     private Integer stockCount;

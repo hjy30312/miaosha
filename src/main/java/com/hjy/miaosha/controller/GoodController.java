@@ -52,7 +52,7 @@ public class GoodController {
         //状态
         int miaoshaStatus;
         //具体开始时间
-        int remainSeconds = 0;
+        int remainSeconds;
         if (now < startAt) {
             //秒杀还没开始,倒计时
             miaoshaStatus = 0;
@@ -66,13 +66,9 @@ public class GoodController {
             miaoshaStatus = 1;
             remainSeconds = 0;
         }
-        logger.warn("miaoshaStatus:" + miaoshaStatus +" remainSeconds:" + remainSeconds);
         model.addAttribute("miaoshaStatus", miaoshaStatus);
         model.addAttribute("remainSeconds", remainSeconds);
         return "goods_detail";
     }
-
-
-
 
 }
