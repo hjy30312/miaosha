@@ -1,6 +1,5 @@
 package com.hjy.miaosha.service;
 
-import com.hjy.miaosha.dao.GoodsDao;
 import com.hjy.miaosha.dao.OrderDao;
 import com.hjy.miaosha.domain.MiaoshaOrder;
 import com.hjy.miaosha.domain.OrderInfo;

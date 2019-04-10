@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Class-Path: spring-aop-4.3.12.RELEASE.jar spring-core-4.3.12.RELEASE.j
+ ar jackson-annotations-2.8.0.jar spring-beans-4.3.12.RELEASE.jar myba
+ tis-spring-1.3.1.jar tomcat-jdbc-8.5.23.jar spring-boot-autoconfigure
+ -1.5.8.RELEASE.jar spring-boot-starter-logging-1.5.8.RELEASE.jar tomc
+ at-juli-8.5.23.jar spring-boot-1.5.8.RELEASE.jar validation-api-1.1.0
+ .Final.jar tomcat-embed-core-8.5.23.jar commons-lang3-3.6.jar thymele
+ af-layout-dialect-1.4.0.jar spring-context-4.3.12.RELEASE.jar logback
+ -core-1.1.11.jar javassist-3.21.0-GA.jar jcl-over-slf4j-1.7.25.jar sp
+ ring-boot-starter-web-1.5.8.RELEASE.jar spring-expression-4.3.12.RELE
+ ASE.jar groovy-2.4.12.jar classmate-1.3.4.jar mybatis-spring-boot-sta
+ rter-1.3.1.jar jackson-databind-2.8.10.jar commons-codec-1.10.jar spr
+ ing-web-4.3.12.RELEASE.jar thymeleaf-2.1.5.RELEASE.jar mysql-connecto
+ r-java-5.1.44.jar log4j-over-slf4j-1.7.25.jar jackson-core-2.8.10.jar
+  druid-1.1.12.jar logback-classic-1.1.11.jar spring-boot-starter-tomc
+ at-1.5.8.RELEASE.jar mybatis-3.4.5.jar tomcat-annotations-api-8.5.23.
+ jar spring-boot-starter-1.5.8.RELEASE.jar spring-boot-starter-jdbc-1.
+ 5.8.RELEASE.jar jboss-logging-3.3.1.Final.jar snakeyaml-1.17.jar slf4
+ j-api-1.7.25.jar tomcat-embed-websocket-8.5.23.jar jedis-2.9.0.jar co
+ mmons-pool2-2.4.2.jar spring-boot-starter-validation-1.5.8.RELEASE.ja
+ r spring-boot-starter-thymeleaf-1.5.8.RELEASE.jar mybatis-spring-boot
+ -autoconfigure-1.3.1.jar tomcat-embed-el-8.5.23.jar spring-jdbc-4.3.1
+ 2.RELEASE.jar spring-tx-4.3.12.RELEASE.jar fastjson-1.2.38.jar jul-to
+ -slf4j-1.7.25.jar thymeleaf-spring4-2.1.5.RELEASE.jar hibernate-valid
+ ator-5.3.5.Final.jar spring-webmvc-4.3.12.RELEASE.jar ognl-3.0.8.jar 
+ unbescape-1.1.0.RELEASE.jar
+Main-Class: com.hjy.miaosha.MiaoshaApplication
+

@@ -1,6 +1,5 @@
 package com.hjy.miaosha.controller;
 
-import com.hjy.miaosha.domain.Goods;
 import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.service.GoodsService;
 import com.hjy.miaosha.service.UserService;
