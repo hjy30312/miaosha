@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
             GlobalException ex= (GlobalException)e;
             return Result.error(ex.getCm());
         }else if (e instanceof BindException) {
-            //绑定异常
+            //绑定异
             BindException ex = (BindException) e;
             List<ObjectError> errors = ex.getAllErrors();
             ObjectError error = errors.get(0);
