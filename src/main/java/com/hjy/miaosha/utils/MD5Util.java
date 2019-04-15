@@ -21,7 +21,6 @@ public class MD5Util {
 
     public static String inputPassToDbPass(String input, String saltDB) {
         String formPass = inputPassToFormPass(input);
-        System.out.println(formPass);
         String dbPass = formPassToDBPass(formPass,saltDB);
         return dbPass;
     }

@@ -6,14 +6,18 @@ import com.hjy.miaosha.result.Result;
 import com.hjy.miaosha.service.GoodsService;
 import com.hjy.miaosha.service.UserService;
 import com.hjy.miaosha.vo.GoodsVo;
+import com.hjy.miaosha.vo.LoginVo;
 import org.slf4j.Logger;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 
 @Controller
@@ -25,13 +29,39 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    private static Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @RequestMapping("/to_register")
+    public String toRegister() {
+        return "register";
+    }
+
+    @RequestMapping("do_register")
+    @ResponseBody
+    public Result<String> doLogin(@Valid LoginVo user) {
+        logger.warn(String.valueOf(user));
+        return Result.success(userService.register(user));
+    }
 
 
+
+    @RequestMapping("/to_login")
+    public String toLogin(){
+        return "login";
+    }
+
+    @RequestMapping("/do_login")
+    @ResponseBody
+    public Result<String> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
+        logger.info(loginVo.toString());
+        String token =  userService.login(response,loginVo);
+        return Result.success(token);
+    }
 
     @RequestMapping("/info")
     @ResponseBody
     public Result<User> toLogin(Model model,
-                          User user) {
+                                User user) {
         return Result.success(user);
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 
 @Service
@@ -32,7 +33,7 @@ public class UserService {
         return userDao.getById(id);
     }
 
-    public Boolean login(HttpServletResponse response,LoginVo loginVo) {
+    public String login(HttpServletResponse response,LoginVo loginVo) {
 
         if (loginVo == null) {
             throw  new GlobalException(CodeMsg.SERVER_ERROR);
@@ -55,7 +56,7 @@ public class UserService {
         //生成cookie
         String token = UUIDUtil.uuid();
         addCookie(response,token,user);
-        return true;
+        return token;
     }
 
     public User getByToken(HttpServletResponse response,String token) {
@@ -78,5 +79,30 @@ public class UserService {
         //设置到根目录
         cookie.setPath("/");
         response.addCookie(cookie);
+    }
+
+    public String register(LoginVo user) {
+        if (user == null) {
+            throw  new GlobalException(CodeMsg.SERVER_ERROR);
+        }
+        String mobile = user.getMobile();
+
+        //判断手机号是否存在
+        User user1 = userDao.getById(Long.parseLong(mobile));
+        if (user1 != null) {
+            throw  new GlobalException(CodeMsg.MOBLIE_EXIST);
+        }
+
+        User newUser = new User();
+        newUser.setId(Long.parseLong(user.getMobile()));
+        newUser.setPassword(MD5Util.formPassToDBPass(user.getPassword(),"1a2b3c4d"));
+        newUser.setNickname(user + user.getMobile());
+        newUser.setRegisterDate(new Date());
+        newUser.setLastLoginDate(new Date());
+        int resultCount = userDao.insert(newUser);
+        if (resultCount == 0) {
+            return "注册失败";
+        }
+        return "注册成功";
     }
 }

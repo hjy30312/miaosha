@@ -1,12 +1,14 @@
 package com.hjy.miaosha.domain;
 
+import com.hjy.miaosha.validation.IsMobile;
+
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
  * 用户
  */
 public class User {
-
 
     private Long id;
     private String nickname;
