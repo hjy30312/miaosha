@@ -50,36 +50,45 @@ public class GoodController {
     public String list(HttpServletRequest request, HttpServletResponse response,
                        Model model, User user) {
         model.addAttribute("user",user);
-        //查询商品列表
-        List<GoodsVo> goodVoList =  goodsService.listGoodsVo();
-        model.addAttribute("goodsList", goodVoList);
-         // return "goods_list";
+        // 取缓存
         String html = redisService.get(GoodsKey.getGoodsList, "", String.class);
         if (!StringUtils.isEmpty(html)) {
             return html;
         }
 
+        // 查询商品列表
+        List<GoodsVo> goodVoList =  goodsService.listGoodsVo();
+        model.addAttribute("goodsList", goodVoList);
+         // return "goods_list";
         SpringWebContext ctx = new SpringWebContext(request, response,
                 request.getServletContext(), request.getLocale(),model.asMap(), applicationContext);
         //手动渲染
-        thymeleafViewResolver.getTemplateEngine().process("goods_list",ctx);
+        html = thymeleafViewResolver.getTemplateEngine().process("goods_list",ctx);
         if (!StringUtils.isEmpty(html)) {
             redisService.set(GoodsKey.getGoodsList, "" , html);
         }
         return html;
     }
 
-    @RequestMapping("/to_detail/{goodsId}")
-    public String toDetail(Model model, User user,
+    @RequestMapping(value = "/to_detail/{goodsId}", produces = "text/html")
+    @ResponseBody
+    public String toDetail(HttpServletRequest request, HttpServletResponse response,Model model, User user,
                           @PathVariable("goodsId") long goodsId) {
         model.addAttribute("user",user);
 
+        // 取缓存
+        String html  = redisService.get(GoodsKey.getGoodsDetail, ""+goodsId, String.class);
+        if (!StringUtils.isEmpty(html)) {
+            return html;
+        }
+        //手动渲染
         GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
         model.addAttribute("goods",goods);
 
         long startAt = goods.getStartDate().getTime();
         long endAt = goods.getEndDate().getTime();
         long now = System.currentTimeMillis();
+
         //状态
         int miaoshaStatus;
         //具体开始时间
@@ -99,7 +108,13 @@ public class GoodController {
         }
         model.addAttribute("miaoshaStatus", miaoshaStatus);
         model.addAttribute("remainSeconds", remainSeconds);
-        return "goods_detail";
+//        return "goods_detail";
+        SpringWebContext ctx = new SpringWebContext(request,response,
+                request.getServletContext(),request.getLocale(), model.asMap(), applicationContext );
+        html = thymeleafViewResolver.getTemplateEngine().process("goods_detail", ctx);
+        if (!StringUtils.isEmpty(html)) {
+            redisService.set(GoodsKey.getGoodsDetail, ""+goodsId, html);
+        }
+        return html;
     }
-
 }
