@@ -27,13 +27,14 @@ public class MiaoshaController {
     RedisService redisService;
     @Autowired
     GoodsService goodsService;
-
     @Autowired
     OrderService orderService;
-
     @Autowired
     MiaoshaService miaoshaService;
 
+    /**
+     * 做秒杀操作
+     */
     @RequestMapping("/do_miaosha")
     public String toMiaosha(Model model, User user,
                             @RequestParam("goodsId")long goodsId) {

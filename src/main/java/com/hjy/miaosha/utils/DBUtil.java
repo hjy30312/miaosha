@@ -30,7 +30,4 @@ public class DBUtil {
         Class.forName(driver);
         return DriverManager.getConnection(url,username,password);
     }
-
-
-
 }

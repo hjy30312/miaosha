@@ -1,8 +1,11 @@
 package com.hjy.miaosha.domain;
 
+import lombok.Data;
+
 /**
  * 商品
  */
+
 public class Goods {
     private Long id;
     private String goodsName;

@@ -3,9 +3,7 @@ package com.hjy.miaosha.controller;
 import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.redis.RedisService;
 import com.hjy.miaosha.result.Result;
-import com.hjy.miaosha.service.GoodsService;
 import com.hjy.miaosha.service.UserService;
-import com.hjy.miaosha.vo.GoodsVo;
 import com.hjy.miaosha.vo.LoginVo;
 import org.slf4j.Logger;
 
@@ -29,13 +27,23 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
+    /**
+     * 跳转注册界面
+     * @return
+     */
     @RequestMapping("/to_register")
     public String toRegister() {
         return "register";
     }
 
+    /**
+     * 做登录
+     * @param user
+     * @return
+     */
     @RequestMapping("do_register")
     @ResponseBody
     public Result<String> doLogin(@Valid LoginVo user) {
@@ -44,12 +52,19 @@ public class UserController {
     }
 
 
-
+    /**
+     * 跳转登录界面
+     * @return
+     */
     @RequestMapping("/to_login")
     public String toLogin(){
         return "login";
     }
 
+    /**
+     * 做登录
+     * @return
+     */
     @RequestMapping("/do_login")
     @ResponseBody
     public Result<String> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
@@ -58,9 +73,15 @@ public class UserController {
         return Result.success(token);
     }
 
+    /**
+     * 显示用户信息
+     * @param model
+     * @param user
+     * @return
+     */
     @RequestMapping("/info")
     @ResponseBody
-    public Result<User> toLogin(Model model,
+    public Result<User> info(Model model,
                                 User user) {
         return Result.success(user);
     }

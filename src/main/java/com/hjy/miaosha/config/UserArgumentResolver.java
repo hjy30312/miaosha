@@ -14,19 +14,32 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+/**
+ * 实现User生成  获取token
+ * 参数验证器
+ */
 @Service
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Autowired
     UserService userService;
 
-
+    /**
+     * 用于判定是否需要处理该参数分解，返回true为需要，
+     * 并会去调用下面的方法resolveArgument。
+     * @param methodParameter
+     * @return
+     */
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
         Class<?> clazz = methodParameter.getParameterType();
         return clazz == User.class;
     }
 
+    /**
+     * 真正用于处理参数分解的方法，返回的Object就是controller方法上的形参对象。
+     */
     @Override
     public Object resolveArgument(MethodParameter methodParameter,
                                   ModelAndViewContainer modelAndViewContainer,
@@ -44,6 +57,12 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         return userService.getByToken(response,cookieToken);
     }
 
+    /**
+     * 从cookie里获取以cookiName为键的值
+     * @param request
+     * @param cookiName
+     * @return
+     */
     private String getCookieValue(HttpServletRequest request, String cookiName) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null || cookies.length <= 0) {

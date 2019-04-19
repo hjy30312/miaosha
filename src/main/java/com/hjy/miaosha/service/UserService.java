@@ -30,7 +30,35 @@ public class UserService {
     RedisService redisService;
 
     public User getById(long id) {
-        return userDao.getById(id);
+        //取缓存
+        User user = redisService.get(MiaoshaUserKey.getById, ""+id, User.class);
+        if (user != null) {
+            return user;
+        }
+        //取数据库
+        user = userDao.getById(id);
+        if (user != null) {
+            redisService.set(MiaoshaUserKey.getById, ""+id, User.class);
+        }
+        return user;
+    }
+
+    public boolean updatePassword(String token, long id, String formPass) {
+        //取user
+        User  user = getById(id);
+        if (user == null) {
+            throw new GlobalException(CodeMsg.MOBLIE_NOT_EXIST);
+        }
+        //更新数据库
+        User toBeUpdate = new User();
+        toBeUpdate.setId(id);
+        toBeUpdate.setPassword(MD5Util.formPassToDBPass(formPass, user.getSalt()));
+        userDao.update(toBeUpdate);
+        //处理缓存 确保缓存一直
+        redisService.delete(MiaoshaUserKey.getById,""+id);
+        user.setPassword(toBeUpdate.getPassword());
+        redisService.set(MiaoshaUserKey.token, token, user);
+        return true;
     }
 
     public String login(HttpServletResponse response,LoginVo loginVo) {

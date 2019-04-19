@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
-
+/**
+ * 测试使用
+ */
 @Controller
 @RequestMapping("/demo")
 public class SampleController {
