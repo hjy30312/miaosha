@@ -14,12 +14,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/user/")
 public class UserController {
 
     @Autowired
@@ -34,7 +35,7 @@ public class UserController {
      * 跳转注册界面
      * @return
      */
-    @RequestMapping("/to_register")
+    @RequestMapping("to_register")
     public String toRegister() {
         return "register";
     }
@@ -55,7 +56,7 @@ public class UserController {
      * 跳转登录界面
      * @return
      */
-    @RequestMapping("/to_login")
+    @RequestMapping("to_login")
     public String toLogin(){
         return "login";
     }
@@ -64,7 +65,7 @@ public class UserController {
      * 做登录
      * @return
      */
-    @RequestMapping("/do_login")
+    @RequestMapping("do_login")
     @ResponseBody
     public Result<String> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
         logger.info(loginVo.toString());
@@ -78,7 +79,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @RequestMapping("/info")
+    @RequestMapping("info")
     @ResponseBody
     public Result<User> info(Model model,
                                 User user) {
@@ -90,12 +91,27 @@ public class UserController {
      * @param user
      * @return
      */
-    @RequestMapping("/update")
+    @RequestMapping("update")
     public String updatePassword(User user) {
         if (user == null) {
             return "login";
         }
         userService.updatePassword(user.getId(),user.getPassword());
-        return "update_success";
+        return "operate_success";
+    }
+
+    /**
+     * 登出 注销
+     * @param user
+     * @return
+     */
+    @RequestMapping("logout")
+    public String logout(HttpServletRequest request, User user){
+        if (user == null) {
+            return "login";
+        }
+        request.removeAttribute(UserService.COOKI_NAME_TOKEN);
+        userService.logout(user.getId());
+        return "operate_success";
     }
 }

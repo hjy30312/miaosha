@@ -65,6 +65,15 @@ public class UserService {
         return true;
     }
 
+    /**
+     * 清空缓存
+     * @param id
+     */
+    public void logout(long id) {
+        redisService.delete(MiaoshaUserKey.getById,""+id);
+    }
+
+
     public String login(HttpServletResponse response,LoginVo loginVo) {
 
         if (loginVo == null) {
