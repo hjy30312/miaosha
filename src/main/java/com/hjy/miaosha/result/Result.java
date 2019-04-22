@@ -6,12 +6,11 @@ public class Result<T> {
 	private T data;
 
 	/**
-	 * 成功时候的调用
+	 * 成功时候的调用  传数据
 	 * */
 	public static <T> Result<T> success(T data){
 		return new  Result<T>(data);
 	}
-	
 	/**
 	 * 失败时候的调用
 	 * */

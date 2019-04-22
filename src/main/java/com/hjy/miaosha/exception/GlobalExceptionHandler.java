@@ -1,6 +1,7 @@
 package com.hjy.miaosha.exception;
 
 
+import com.aliyuncs.exceptions.ClientException;
 import com.hjy.miaosha.result.CodeMsg;
 import com.hjy.miaosha.result.Result;
 import org.springframework.validation.BindException;
@@ -27,7 +28,7 @@ public class GlobalExceptionHandler {
         if (e instanceof GlobalException) {
             GlobalException ex= (GlobalException)e;
             return Result.error(ex.getCm());
-        }else if (e instanceof BindException) {
+        } else if (e instanceof BindException) {
             //绑定异
             BindException ex = (BindException) e;
             List<ObjectError> errors = ex.getAllErrors();
@@ -38,7 +39,5 @@ public class GlobalExceptionHandler {
         } else {
             return Result.error(CodeMsg.SERVER_ERROR);
         }
-
     }
-
 }

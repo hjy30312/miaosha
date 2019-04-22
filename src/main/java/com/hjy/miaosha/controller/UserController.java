@@ -1,7 +1,10 @@
 package com.hjy.miaosha.controller;
 
+import com.aliyuncs.exceptions.ClientException;
 import com.hjy.miaosha.domain.User;
+import com.hjy.miaosha.redis.MiaoshaUserKey;
 import com.hjy.miaosha.redis.RedisService;
+import com.hjy.miaosha.result.CodeMsg;
 import com.hjy.miaosha.result.Result;
 import com.hjy.miaosha.service.UserService;
 import com.hjy.miaosha.vo.LoginVo;
@@ -10,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -51,6 +53,16 @@ public class UserController {
         return Result.success(userService.register(user));
     }
 
+    /**
+     * 做注册带验证码
+     * @param user
+     * @return
+     */
+    @RequestMapping("do_register2")
+    @ResponseBody
+    public Result<String> doRegister2(@Valid LoginVo user, String identifyCode) {
+        return Result.success(userService.register(user,identifyCode));
+    }
 
     /**
      * 跳转登录界面
@@ -75,14 +87,12 @@ public class UserController {
 
     /**
      * 显示用户信息
-     * @param model
      * @param user
      * @return
      */
     @RequestMapping("info")
     @ResponseBody
-    public Result<User> info(Model model,
-                                User user) {
+    public Result<User> info(User user) {
         return Result.success(user);
     }
 
@@ -101,7 +111,7 @@ public class UserController {
     }
 
     /**
-     * 登出 注销
+     * 登出 注销登录
      * @param user
      * @return
      */
@@ -111,7 +121,23 @@ public class UserController {
             return "login";
         }
         request.removeAttribute(UserService.COOKI_NAME_TOKEN);
-        userService.logout(user.getId());
+        redisService.delete(MiaoshaUserKey.getById,""+user.getId());
         return "operate_success";
+    }
+
+    /**
+     * 向手机号发送验证码
+     * @param mobile
+     * @return
+     */
+    @RequestMapping("send_verification_code")
+    @ResponseBody
+    public Result<String> sendVerificationCode(long mobile){
+        try {
+            userService.sendMessage(mobile);
+        } catch (ClientException e) {
+            return Result.error(CodeMsg.MOBLIE_CHECK_ERROR);
+        }
+        return Result.success("");
     }
 }
