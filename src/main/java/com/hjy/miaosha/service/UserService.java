@@ -43,7 +43,13 @@ public class UserService {
         return user;
     }
 
-    public boolean updatePassword(String token, long id, String formPass) {
+    /**
+     * 先更新数据库 再删除相对应缓存
+     * @param id
+     * @param formPass
+     * @return
+     */
+    public boolean updatePassword(long id, String formPass) {
         //取user
         User  user = getById(id);
         if (user == null) {
@@ -54,10 +60,8 @@ public class UserService {
         toBeUpdate.setId(id);
         toBeUpdate.setPassword(MD5Util.formPassToDBPass(formPass, user.getSalt()));
         userDao.update(toBeUpdate);
-        //处理缓存 确保缓存一直
+        //处理缓存  删除
         redisService.delete(MiaoshaUserKey.getById,""+id);
-        user.setPassword(toBeUpdate.getPassword());
-        redisService.set(MiaoshaUserKey.token, token, user);
         return true;
     }
 

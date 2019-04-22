@@ -32,7 +32,7 @@ public class RedisService {
 	}
 	
 	/**
-	 * 设置对象
+	 * 设置对象或更新对象
 	 * */
 	public <T> boolean set(KeyPrefix prefix, String key,  T value) {
 		 Jedis jedis = null;

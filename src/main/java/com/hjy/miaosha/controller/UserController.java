@@ -40,14 +40,13 @@ public class UserController {
     }
 
     /**
-     * 做登录
+     * 做注册
      * @param user
      * @return
      */
     @RequestMapping("do_register")
     @ResponseBody
-    public Result<String> doLogin(@Valid LoginVo user) {
-        logger.warn(String.valueOf(user));
+    public Result<String> doRegister(@Valid LoginVo user) {
         return Result.success(userService.register(user));
     }
 
@@ -84,5 +83,19 @@ public class UserController {
     public Result<User> info(Model model,
                                 User user) {
         return Result.success(user);
+    }
+
+    /**
+     * 修改密码
+     * @param user
+     * @return
+     */
+    @RequestMapping("/update")
+    public String updatePassword(User user) {
+        if (user == null) {
+            return "login";
+        }
+        userService.updatePassword(user.getId(),user.getPassword());
+        return "update_success";
     }
 }
