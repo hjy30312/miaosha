@@ -70,64 +70,15 @@ public class GoodController {
         return html;
     }
 
-    @RequestMapping(value = "/to_detail/{goodsId}", produces = "text/html")
-    @ResponseBody
-    public String toDetail2(HttpServletRequest request, HttpServletResponse response,Model model, User user,
-                          @PathVariable("goodsId") long goodsId) {
-        model.addAttribute("user",user);
-
-        // 取缓存
-        String html  = redisService.get(GoodsKey.getGoodsDetail, ""+goodsId, String.class);
-        if (!StringUtils.isEmpty(html)) {
-            return html;
-        }
-        //手动渲染
-        GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
-        model.addAttribute("goods",goods);
-
-        long startAt = goods.getStartDate().getTime();
-        long endAt = goods.getEndDate().getTime();
-        long now = System.currentTimeMillis();
-
-        //状态
-        int miaoshaStatus;
-        //具体开始时间
-        int remainSeconds;
-        if (now < startAt) {
-            //秒杀还没开始,倒计时
-            miaoshaStatus = 0;
-            remainSeconds = (int) ((startAt - now)/1000);
-        } else if (now > endAt){
-            //秒杀已经结束
-            miaoshaStatus = 2;
-            remainSeconds = -1;
-        } else {
-            //秒杀进行中
-            miaoshaStatus = 1;
-            remainSeconds = 0;
-        }
-        model.addAttribute("miaoshaStatus", miaoshaStatus);
-        model.addAttribute("remainSeconds", remainSeconds);
-
-        IWebContext ctx = new WebContext(request,response,  request.getServletContext(),request.getLocale(), model.asMap());
-        html = thymeleafViewResolver.getTemplateEngine().process("goods_detail", ctx);
-        if (!StringUtils.isEmpty(html)) {
-            redisService.set(GoodsKey.getGoodsDetail, ""+goodsId, html);
-        }
-        return html;
-    }
-
     /**
      * 页面静态化 未缓存
      * @return
      */
-    @RequestMapping(value = "/to_detail2/{goodsId}", produces = "text/html")
+    @RequestMapping(value = "/detail/{goodsId}")
     @ResponseBody
-    public Result<GoodsDetailVo> toDetail(HttpServletRequest request, HttpServletResponse response, Model model, User user,
+    public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response, Model model, User user,
                                           @PathVariable("goodsId") long goodsId) {
         GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
-        model.addAttribute("goods",goods);
-
         long startAt = goods.getStartDate().getTime();
         long endAt = goods.getEndDate().getTime();
         long now = System.currentTimeMillis();
