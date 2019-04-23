@@ -77,8 +77,7 @@
                 goodsId:$("#goodsId").val()
             },
             success:function (data) {
-                if (data.code === 0) {
-                    console.log(data);
+                if (data.code == 0) {
                     window.location.href="/order_detail.htm?orderId=" + data.data.id;
                 } else {
                     layer.msg(data.msg);
