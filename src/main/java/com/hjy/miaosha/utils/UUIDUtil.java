@@ -1,7 +1,7 @@
 package com.hjy.miaosha.utils;
 
-import java.util.Random;
-import java.util.UUID;
+
+import java.util.*;
 
 public class UUIDUtil {
     public static String uuid(){
@@ -22,5 +22,27 @@ public class UUIDUtil {
             result += randInt;
         }
         return result;
+    }
+
+
+
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        // 1.
+        Iterator<String> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            String item = iterator.next();
+            if ("1".equals(item)) {
+                iterator.remove();
+            }
+        }
+        // 2.
+        for (String item : list) {
+            if ("2".equals(item)) {
+                list.remove(item);
+            }
+        }
     }
 }

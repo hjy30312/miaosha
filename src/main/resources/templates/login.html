@@ -75,7 +75,7 @@
         var password = md5(str);
 
         $.ajax({
-            url: "/login/do_login",
+            url: "/user/do_login",
             type: "POST",
             data:{
                 mobile:$("#mobile").val(),

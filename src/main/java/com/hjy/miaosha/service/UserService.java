@@ -1,6 +1,5 @@
 package com.hjy.miaosha.service;
 
-import com.aliyuncs.exceptions.ClientException;
 import com.hjy.miaosha.dao.UserDao;
 import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.exception.GlobalException;
@@ -9,9 +8,9 @@ import com.hjy.miaosha.redis.RedisService;
 import com.hjy.miaosha.redis.UserKey;
 import com.hjy.miaosha.result.CodeMsg;
 import com.hjy.miaosha.utils.MD5Util;
-import com.hjy.miaosha.utils.SendMessageUtil;
 import com.hjy.miaosha.utils.UUIDUtil;
 import com.hjy.miaosha.vo.LoginVo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,7 @@ import java.util.Date;
 
 
 @Service
+@Slf4j
 public class UserService {
 
     public static final String COOKI_NAME_TOKEN = "token";
@@ -42,7 +42,7 @@ public class UserService {
         //取数据库
         user = userDao.getById(id);
         if (user != null) {
-            redisService.set(MiaoshaUserKey.getById, ""+id, User.class);
+            redisService.set(MiaoshaUserKey.getById, ""+id, user);
         }
         return user;
     }
@@ -73,7 +73,6 @@ public class UserService {
 
 
     public String login(HttpServletResponse response,LoginVo loginVo) {
-
         if (loginVo == null) {
             throw  new GlobalException(CodeMsg.SERVER_ERROR);
         }
@@ -190,14 +189,14 @@ public class UserService {
      * 发送验证码  1.生成随机数 2.存入redis 3.发送
      * @param mobile
      * @return
-     */
+
     public boolean sendMessage(long mobile) throws ClientException {
         String key = String.valueOf(mobile);
         String random = UUIDUtil.getRandom6();
         redisService.set(UserKey.getMessage, key, random);
         SendMessageUtil.sendSms(key,random);
         return true;
-    }
+    }*/
 
 
 

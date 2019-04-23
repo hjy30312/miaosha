@@ -68,18 +68,54 @@
 </div>
 </body>
 <script>
-    $(function(){
-        getDetail();
-    });
 
+    function doMiaosha() {
+        $.ajax({
+            url:"/miaosha/do_miaosha",
+            type:"POST",
+            data:{
+                goodsId:$("#goodsId").val()
+            },
+            success:function (data) {
+                if (data.code == 0) {
+                    window.location.href="/order_detail.htm?orderId=" + data.data.id;
+                } else {
+                    layer.msg(data.msg);
+                }
+            },
+            error:function () {
+                layer.msg("客户端请求有误");
+            }
+        });
+    }
+
+    /**
+     * 填充数据
+     * @param detail
+     */
     function render(detail) {
-        var miaoshaStatus = detail.miaoshaStatus;
+       // var miaoshaStatus = detail.miaoshaStatus;
         var  remainSeconds = detail.remainSeconds;
         var  goods = detail.goods;
         var  user = detail.user;
-
+        if (user) {
+            $("#userTip").hide();
+        }
+        $("#goodsName").test(goods.goodsName);
+        $("#goodsImg").attr("src", goods.goodsImg);
+        $("#startTime").text(new Date(goods.startDate).format('yyyy-MM-dd hh:mm:ss'));
+        $("#remainSeconds").val(remainSeconds);
+        $("#goodsId").val(goods.id);
+        $("#goodsPrice").text(goods.goodsPrice);
+        $("#miaoshaPrice").text(goods.miaoshaPrice);
+        $("#stockCount").text(goods.stockCount);
+        countDown();
     }
 
+
+    $(function(){
+        getDetail();
+    });
     function getDetail() {
         var goodsId = g_getQueryString("goodsId");
         $.ajax({
@@ -89,14 +125,16 @@
                 if (data.code == 0) {
                     //加载商品详情参数
                     render(data.data);
+                } else {
+                    layer.msg(data.msg);
                 }
             },
             error:function () {
                 layer.msg("客户端请求有误")
             }
-
         });
     }
+
 
 </script>
 </html>

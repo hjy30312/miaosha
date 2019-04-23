@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.context.ApplicationContext;
-import org.thymeleaf.spring4.context.SpringWebContext;
-import org.thymeleaf.spring4.view.ThymeleafViewResolver;
-
+import org.thymeleaf.context.IWebContext;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,13 +57,11 @@ public class GoodController {
         if (!StringUtils.isEmpty(html)) {
             return html;
         }
-
         // 查询商品列表
         List<GoodsVo> goodVoList =  goodsService.listGoodsVo();
         model.addAttribute("goodsList", goodVoList);
          // return "goods_list";
-        SpringWebContext ctx = new SpringWebContext(request, response,
-                request.getServletContext(), request.getLocale(),model.asMap(), applicationContext);
+        IWebContext ctx = new WebContext(request,response,  request.getServletContext(),request.getLocale(), model.asMap());
         //手动渲染
         html = thymeleafViewResolver.getTemplateEngine().process("goods_list",ctx);
         if (!StringUtils.isEmpty(html)) {
@@ -72,7 +70,7 @@ public class GoodController {
         return html;
     }
 
-    @RequestMapping(value = "/to_detail2/{goodsId}", produces = "text/html")
+    @RequestMapping(value = "/to_detail/{goodsId}", produces = "text/html")
     @ResponseBody
     public String toDetail2(HttpServletRequest request, HttpServletResponse response,Model model, User user,
                           @PathVariable("goodsId") long goodsId) {
@@ -110,9 +108,8 @@ public class GoodController {
         }
         model.addAttribute("miaoshaStatus", miaoshaStatus);
         model.addAttribute("remainSeconds", remainSeconds);
-//        return "goods_detail";
-        SpringWebContext ctx = new SpringWebContext(request,response,
-                request.getServletContext(),request.getLocale(), model.asMap(), applicationContext );
+
+        IWebContext ctx = new WebContext(request,response,  request.getServletContext(),request.getLocale(), model.asMap());
         html = thymeleafViewResolver.getTemplateEngine().process("goods_detail", ctx);
         if (!StringUtils.isEmpty(html)) {
             redisService.set(GoodsKey.getGoodsDetail, ""+goodsId, html);
@@ -121,10 +118,10 @@ public class GoodController {
     }
 
     /**
-     * 页面静态化
+     * 页面静态化 未缓存
      * @return
      */
-    @RequestMapping(value = "/to_detail/{goodsId}", produces = "text/html")
+    @RequestMapping(value = "/to_detail2/{goodsId}", produces = "text/html")
     @ResponseBody
     public Result<GoodsDetailVo> toDetail(HttpServletRequest request, HttpServletResponse response, Model model, User user,
                                           @PathVariable("goodsId") long goodsId) {
@@ -159,21 +156,4 @@ public class GoodController {
         detailVo.setMiaoshaStatus(miaoshaStatus);
         return Result.success(detailVo);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

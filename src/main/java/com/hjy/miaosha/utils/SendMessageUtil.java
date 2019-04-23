@@ -1,5 +1,5 @@
 package com.hjy.miaosha.utils;
-
+/*
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import com.aliyuncs.DefaultAcsClient;
@@ -55,4 +55,4 @@ public class SendMessageUtil {
             e.printStackTrace();
         }
     }
-}
+}*/

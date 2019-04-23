@@ -1,6 +1,6 @@
 package com.hjy.miaosha.controller;
 
-import com.aliyuncs.exceptions.ClientException;
+
 import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.redis.MiaoshaUserKey;
 import com.hjy.miaosha.redis.RedisService;
@@ -129,7 +129,7 @@ public class UserController {
      * 向手机号发送验证码
      * @param mobile
      * @return
-     */
+
     @RequestMapping("send_verification_code")
     @ResponseBody
     public Result<String> sendVerificationCode(long mobile){
@@ -139,5 +139,5 @@ public class UserController {
             return Result.error(CodeMsg.MOBLIE_CHECK_ERROR);
         }
         return Result.success("");
-    }
+    }*/
 }

@@ -1,7 +1,6 @@
 package com.hjy.miaosha.exception;
 
 
-import com.aliyuncs.exceptions.ClientException;
 import com.hjy.miaosha.result.CodeMsg;
 import com.hjy.miaosha.result.Result;
 import org.springframework.validation.BindException;
