@@ -27,6 +27,7 @@ public class OrderService {
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setCreateDate(new Date());
         orderInfo.setDeliveryAddrId(0L);
+        orderInfo.setGoodsId(goods.getId());
         orderInfo.setGoodsCount(1);
         orderInfo.setGoodsName(goods.getGoodsName());
         orderInfo.setGoodsPrice(goods.getMiaoshaPrice());
@@ -41,5 +42,9 @@ public class OrderService {
         miaoshaOrder.setUserId(user.getId());
         orderDao.insetMiaoshaOrder(miaoshaOrder);
         return orderInfo;
+    }
+
+    public OrderInfo getOrderById(long orderId) {
+        return orderDao.getOrderById(orderId);
     }
 }
