@@ -37,6 +37,9 @@ public class MiaoshaController {
 
     /**
      * 做秒杀操作
+     * GET POST区别：
+     * GET幂等  从服务端获取数据 无论调用多少次 产生结果都是一样的不会对服务端数据产生任何影响
+     * POST   向服务器端提交数据 例如：对服务器端发生变化
      */
     @RequestMapping(value = "/do_miaosha", method = RequestMethod.POST)
     @ResponseBody
@@ -47,7 +50,7 @@ public class MiaoshaController {
             return Result.error(CodeMsg.SESSION_ERROR);
         }
         //判断库存
-        GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+        GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);  //10 用户刷接口 购买重复商品
         int stock = goods.getStockCount();
         if (stock <= 0) {
             return Result.error(CodeMsg.MIAO_SHA_OVER);

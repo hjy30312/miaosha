@@ -25,7 +25,6 @@ public class MiaoshaService {
     @Transactional
     public OrderInfo miaosha(User user, GoodsVo goods) {
         goodsService.reduceStock(goods);
-        //order_info miaosha_order
         return orderService.insertOrder(user,goods);
     }
 }
