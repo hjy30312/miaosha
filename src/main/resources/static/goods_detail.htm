@@ -43,11 +43,6 @@
                 <span id="miaoshaTip"></span>
             </td>
             <td>
-                <!--
-                    <form id="miaoshaForm" method="post" action="/miaosha/do_miaosha">
-                        <button class="btn btn-primary btn-block" type="submit" id="buyButton">立即秒杀</button>
-                        <input type="hidden" name="goodsId"  id="goodsId" />
-                    </form>-->
                 <button class="btn btn-primary btn-block" type="button" id="buyButton"onclick="doMiaosha()">立即秒杀</button>
                 <input type="hidden" name="goodsId"  id="goodsId" />
             </td>
@@ -70,20 +65,21 @@
 <script>
 
     function doMiaosha() {
+
         $.ajax({
             url:"/miaosha/do_miaosha",
             type:"POST",
             data:{
                 goodsId:$("#goodsId").val()
             },
-            success:function (data) {
-                if (data.code == 0) {
-                    window.location.href="/order_detail.htm?orderId=" + data.data.id;
-                } else {
+            success:function(data){
+                if(data.code == 0){
+                    window.location.href="/order_detail.htm?orderId="+data.data.id;
+                }else{
                     layer.msg(data.msg);
                 }
             },
-            error:function () {
+            error:function(){
                 layer.msg("客户端请求有误");
             }
         });
@@ -94,16 +90,16 @@
      * @param detail
      */
     function render(detail) {
-       // var miaoshaStatus = detail.miaoshaStatus;
+        var miaoshaStatus = detail.miaoshaStatus;
         var  remainSeconds = detail.remainSeconds;
         var  goods = detail.goods;
         var  user = detail.user;
         if (user) {
             $("#userTip").hide();
         }
-        $("#goodsName").test(goods.goodsName);
+        $("#goodsName").text(goods.goodsName);
         $("#goodsImg").attr("src", goods.goodsImg);
-        $("#startTime").text(new Date(goods.startDate).format('yyyy-MM-dd hh:mm:ss'));
+        $("#startTime").text(new Date(goods.startDate).format("yyyy-MM-dd hh:mm:ss"));
         $("#remainSeconds").val(remainSeconds);
         $("#goodsId").val(goods.id);
         $("#goodsPrice").text(goods.goodsPrice);
@@ -122,6 +118,7 @@
            url:"/goods/detail/" + goodsId,
             type:"GET",
             success:function (data) {
+               console.info(data);
                 if (data.code == 0) {
                     //加载商品详情参数
                     render(data.data);
