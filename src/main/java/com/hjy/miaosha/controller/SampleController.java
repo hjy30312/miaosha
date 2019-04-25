@@ -2,6 +2,7 @@ package com.hjy.miaosha.controller;
 
 
 import com.hjy.miaosha.domain.User;
+import com.hjy.miaosha.rabbitmq.MQSender;
 import com.hjy.miaosha.result.Result;
 import com.hjy.miaosha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,18 @@ public class SampleController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    MQSender mqSender;
+
+
+    @RequestMapping("/mq")
+    @ResponseBody
+    public Result<String> mq() {
+        mqSender.send("hello,im");
+        return Result.success("Hello,world");
+    }
+
 
 
     @RequestMapping("/db/get")
@@ -55,6 +68,15 @@ public class SampleController {
        // redisService.set(UserKey.getById, ""+1, user);//UserKey:id1
         return Result.success(true);
     }
+
+
+	@RequestMapping("/mq/topic")
+    @ResponseBody
+    public Result<String> topic() {
+		mqSender.sendTopic("hello,imooc");
+        return Result.success("Hello，world");
+    }
+
 
 
 }
