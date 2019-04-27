@@ -8,7 +8,7 @@ CREATE TABLE `miaosha_user`
     `head`            varchar(120) DEFAULT NULL COMMENT '头像，云存储的ID',
     `register_data`   datetime     DEFAULT NULL COMMENT '注册时间',
     `last_login_date` datetime     DEFAULT NULL COMMENT '上次登录时间',
-    `login_count`     int(11)      DEFAULT '0' COMMENT '登录次数',
+    `login_count`      int(11)      DEFAULT '0' COMMENT '登录次数',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

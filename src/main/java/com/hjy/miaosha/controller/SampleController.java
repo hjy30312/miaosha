@@ -77,6 +77,18 @@ public class SampleController {
         return Result.success("Hello，world");
     }
 
+    @RequestMapping("/mq/fanout")
+    @ResponseBody
+    public Result<String> fanout() {
+        mqSender.sendFanout("hello,imooc");
+        return Result.success("Hello，world");
+    }
+    @RequestMapping("/mq/header")
+    @ResponseBody
+    public Result<String> header() {
+        mqSender.sendHeader("hello,imooc");
+        return Result.success("Hello，world");
+    }
 
 
 }
