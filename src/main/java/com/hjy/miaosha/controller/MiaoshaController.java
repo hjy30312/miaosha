@@ -1,7 +1,6 @@
 package com.hjy.miaosha.controller;
 
 import com.hjy.miaosha.domain.MiaoshaOrder;
-import com.hjy.miaosha.domain.OrderInfo;
 import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.rabbitmq.MQSender;
 import com.hjy.miaosha.rabbitmq.MiaoshaMessage;
@@ -13,8 +12,7 @@ import com.hjy.miaosha.service.GoodsService;
 import com.hjy.miaosha.service.MiaoshaService;
 import com.hjy.miaosha.service.OrderService;
 import com.hjy.miaosha.vo.GoodsVo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,12 +25,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Slf4j
 @Controller
 @RequestMapping("/miaosha")
 public class MiaoshaController implements InitializingBean {
 
-    Logger logger = LoggerFactory.getLogger(MiaoshaController.class);
 
     @Autowired
     RedisService redisService;
@@ -86,6 +83,7 @@ public class MiaoshaController implements InitializingBean {
             return Result.error(CodeMsg.SESSION_ERROR);
         }
         long result = miaoshaService.getMiaoshaResult(user.getId(), goodsId);
+
         return Result.success(result);
     }
 

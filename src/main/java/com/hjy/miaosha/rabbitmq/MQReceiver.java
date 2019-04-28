@@ -31,7 +31,7 @@ public class MQReceiver {
         MiaoshaMessage mes = RedisService.stringToBean(message, MiaoshaMessage.class);
         Long goodsId = mes.getGoodsId();
         User user = mes.getUser();
-
+        log.info("bebug");
         GoodsVo goodsVo = goodsService.getGoodsVoByGoodsId(goodsId);
         int stock = goodsVo.getStockCount();
         if (stock <= 0) {
@@ -56,18 +56,19 @@ public class MQReceiver {
 //    public void receive(String message) {
 //        log.info("receive message");
 //    }
-    @RabbitListener(queues = MQConfig.TOPIC_QUQUE1)
-    public void receive1(String message) {
-        log.info("receive topic queue1 message:" + message);
-    }
+//    @RabbitListener(queues = MQConfig.TOPIC_QUQUE1)
+//    public void receive1(String message) {
+//        log.info("receive topic queue1 message:" + message);
+//    }
+//
+//    @RabbitListener(queues = MQConfig.TOPIC_QUQUE2)
+//    public void receive2(String message) {
+//        log.info("receive topic queue2 message:" + message);
+//    }
+//
+//    @RabbitListener(queues = MQConfig.HEADER_QUQUE1)
+//    public void receiveHeaderQueue(byte[] message) {
+//        log.info("receive header queue2 message:" + new String(message));
+//    }
 
-    @RabbitListener(queues = MQConfig.TOPIC_QUQUE2)
-    public void receive2(String message) {
-        log.info("receive topic queue2 message:" + message);
-    }
-
-    @RabbitListener(queues = MQConfig.HEADER_QUQUE1)
-    public void receiveHeaderQueue(byte[] message) {
-        log.info("receive header queue2 message:" + new String(message));
-    }
 }

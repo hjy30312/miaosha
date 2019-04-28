@@ -25,6 +25,11 @@ public class MQConfig {
     public static final String HEADERS_EXCHANGE = "headersExchange";
 
     @Bean
+    public Queue miaoShaQueue(){
+        return new Queue(MIAOSHA_QUEUE,true);
+    }
+
+    @Bean
     public Queue queue() {
         // 持久队列
         return new Queue(MQConfig.QUQUE, true);
