@@ -1,7 +1,9 @@
 package com.hjy.miaosha.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
+@Slf4j
 public class MD5Util {
     public static  String md5(String str) {
         return DigestUtils.md5Hex(str);
@@ -26,9 +28,9 @@ public class MD5Util {
     }
 
     public static void main(String[] args) {
+        System.out.println(inputPassToFormPass("123456"));
         String formPass = inputPassToDbPass("123456",salt);
-
-        System.out.println(formPassToDBPass("1923f6978471aea7f9d918db4fa10e59", salt));
+        //System.out.println(formPassToDBPass("1923f6978471aea7f9d918db4fa10e59", salt));
         System.out.println(formPass);
     }
 

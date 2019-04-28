@@ -5,23 +5,25 @@ import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.rabbitmq.MQSender;
 import com.hjy.miaosha.rabbitmq.MiaoshaMessage;
 import com.hjy.miaosha.redis.GoodsKey;
+import com.hjy.miaosha.redis.MiaoshaKey;
 import com.hjy.miaosha.redis.RedisService;
 import com.hjy.miaosha.result.CodeMsg;
 import com.hjy.miaosha.result.Result;
 import com.hjy.miaosha.service.GoodsService;
 import com.hjy.miaosha.service.MiaoshaService;
 import com.hjy.miaosha.service.OrderService;
+import com.hjy.miaosha.utils.MD5Util;
+import com.hjy.miaosha.utils.UUIDUtil;
 import com.hjy.miaosha.vo.GoodsVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import sun.security.provider.MD5;
 
+import javax.jws.WebParam;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +65,22 @@ public class MiaoshaController implements InitializingBean {
         }
     }
 
+
+
+    @RequestMapping(value = "/path",method = RequestMethod.GET)
+    @ResponseBody
+    public Result<String> getMiaoshaPath(Model model,User user
+            ,@RequestParam("goodsId")long goodsId) {
+        model.addAttribute("user", user);
+        if (user == null) {
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+        String path = miaoshaService.createMiaoshaPath(user,goodsId);
+        return Result.success(path);
+    }
+
+
+
     /**
      * 判断秒杀结果
      * orderId: 成功
@@ -94,15 +112,21 @@ public class MiaoshaController implements InitializingBean {
      * GET幂等  从服务端获取数据 无论调用多少次 产生结果都是一样的不会对服务端数据产生任何影响
      * POST   向服务器端提交数据 例如：对服务器端发生变化
      */
-    @RequestMapping(value = "/do_miaosha", method = RequestMethod.POST)
+    @RequestMapping(value = "/{path}/do_miaosha", method = RequestMethod.POST)
     @ResponseBody
-    public Result<Integer> miaosha(Model model, User user,
-                                   @RequestParam("goodsId") long goodsId) {
+    public Result<Integer> miaosha(Model model, User user
+                ,@RequestParam("goodsId") long goodsId
+                ,@PathVariable("path") String path) {
         model.addAttribute("user", user);
         if (user == null) {
             return Result.error(CodeMsg.SESSION_ERROR);
         }
-
+        //验证path
+        boolean check = miaoshaService.checkPath(user.getId(),goodsId,path);
+        if (!check) {
+            return Result.error(CodeMsg.REQUEST_ILLEGAL);
+        }
+        //内存标记，减少redis访问
         boolean overFlag = localOverMap.get(goodsId);
         if (overFlag) {
             return Result.error(CodeMsg.MIAO_SHA_OVER);

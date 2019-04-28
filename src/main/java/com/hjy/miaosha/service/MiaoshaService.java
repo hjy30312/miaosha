@@ -6,6 +6,8 @@ import com.hjy.miaosha.domain.OrderInfo;
 import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.redis.MiaoshaKey;
 import com.hjy.miaosha.redis.RedisService;
+import com.hjy.miaosha.utils.MD5Util;
+import com.hjy.miaosha.utils.UUIDUtil;
 import com.hjy.miaosha.vo.GoodsVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,4 +72,30 @@ public class MiaoshaService {
     }
 
 
+    /**
+     * 创建秒杀路径
+     * @param user
+     * @param goodsId
+     * @return
+     */
+    public String createMiaoshaPath(User user, long goodsId) {
+        String str = MD5Util.md5(UUIDUtil.uuid());
+        redisService.set(MiaoshaKey.isMiaoshaPath, ""+user.getId()+"_"+goodsId,str);
+        return str;
+    }
+
+    /**
+     * 检查秒杀路径
+     * @param userId 用户Id
+     * @param goodsId 商品Id
+     * @param path 秒杀路径
+     * @return
+     */
+    public boolean checkPath(Long userId, long goodsId, String path) {
+        if (userId == null || path == null) {
+            return false;
+        }
+        String pathOld = redisService.get(MiaoshaKey.isMiaoshaPath, ""+userId+"_"+goodsId,String.class);
+        return path.equals(pathOld);
+    }
 }

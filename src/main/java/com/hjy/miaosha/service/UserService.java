@@ -86,7 +86,9 @@ public class UserService {
         //验证密码
         String dbPass = user.getPassword();
         String slatDB = user.getSalt();
+        log.info("formPass:" + formPass);
         String calcPass = MD5Util.formPassToDBPass(formPass,slatDB);
+        log.info("dbPass:" + dbPass + ",calcPass:" + calcPass);
         if (!calcPass.equals(dbPass)) {
             throw  new GlobalException(CodeMsg.PASSWORD_ERROR);
         }
