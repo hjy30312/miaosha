@@ -7,7 +7,7 @@
   前端：thymeleaf,js <p>
   压测：Jmeter <p>
   构建工具：maven <p>
-  第三方：阿里巴巴SMS短信，driud连接池及监控
+  中间件：阿里巴巴SMS短信，driud连接池及监控,RabbitMQ消息队列
     
     
 
