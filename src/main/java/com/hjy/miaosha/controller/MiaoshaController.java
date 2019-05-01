@@ -15,6 +15,7 @@ import com.hjy.miaosha.service.OrderService;
 import com.hjy.miaosha.utils.MD5Util;
 import com.hjy.miaosha.utils.UUIDUtil;
 import com.hjy.miaosha.vo.GoodsVo;
+import com.sun.deploy.net.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sun.security.provider.MD5;
 
+import javax.imageio.ImageIO;
 import javax.jws.WebParam;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,11 +75,17 @@ public class MiaoshaController implements InitializingBean {
 
     @RequestMapping(value = "/path",method = RequestMethod.GET)
     @ResponseBody
-    public Result<String> getMiaoshaPath(Model model,User user
-            ,@RequestParam("goodsId")long goodsId) {
-        model.addAttribute("user", user);
+    public Result<String> getMiaoshaPath(User user
+            ,@RequestParam("goodsId")long goodsId
+            ,@RequestParam(value="verifyCode", defaultValue="0")int verifyCode) {
         if (user == null) {
             return Result.error(CodeMsg.SESSION_ERROR);
+        }
+        //
+        boolean check = miaoshaService.checkVerifyCode(user, goodsId, verifyCode);
+        if (!check) {
+            //验证码错误
+            return Result.error(CodeMsg.REQUEST_ILLEGAL);
         }
         String path = miaoshaService.createMiaoshaPath(user,goodsId);
         return Result.success(path);
@@ -149,7 +161,30 @@ public class MiaoshaController implements InitializingBean {
         //放入消息队列   在里面进行有关数据库的操作
         sender.sendMiaoshaMessage(message);
         return Result.success(0);
-
     }
+
+
+
+    @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<String> getMiaoshaVerifyCode(HttpServletResponse response, User user,
+                                               @RequestParam("goodsId") long goodsId) {
+        if (user == null) {
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+        try {
+            BufferedImage image = miaoshaService.createVerifyCode(user, goodsId);
+            OutputStream out = response.getOutputStream();
+            ImageIO.write(image, "JPEG", out);
+            out.flush();
+            out.close();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Result.error(CodeMsg.MIAOSHA_FAIL);
+        }
+    }
+
+
 
 }

@@ -2,7 +2,7 @@ package com.hjy.miaosha.result;
 
 
 public class CodeMsg {
-	private int code;
+    private int code;
 	private String msg;
 	
 	//通用异常
@@ -29,7 +29,8 @@ public class CodeMsg {
 	//秒杀模块 5005XX
 	public static CodeMsg MIAO_SHA_OVER = new CodeMsg(500500, "商品已秒杀完毕");
 	public static CodeMsg REPEATE_MIAOSHA = new CodeMsg(500501, "不能重复秒杀");
-
+	public static final CodeMsg MIAOSHA_FAIL = new CodeMsg(500502, "秒杀失败");
+	;
 	/**
 	 * 填充的msg  变参
 	 * @param args

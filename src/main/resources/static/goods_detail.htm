@@ -43,13 +43,13 @@
                 <span id="miaoshaTip"></span>
             </td>
             <td>
-                <!--
-                    <form id="miaoshaForm" method="post" action="/miaosha/do_miaosha">
-                        <button class="btn btn-primary btn-block" type="submit" id="buyButton">立即秒杀</button>
-                        <input type="hidden" name="goodsId"  id="goodsId" />
-                    </form>-->
-                <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="getMiaoshaPath()">立即秒杀
-                </button>
+                <div class="row">
+                    <div class="form-inline">
+                        <img id="verifyCodeImg" width="80" height="32" style="display: none" onclick="refreshVerifyCode()"/>
+                        <input id="verifyCode" class="form-control" style="display:none"/>
+                        <button class="btn btn-primary" type="button" id="buyButton" onclick="getMiaoshaPath()">立即秒杀</button>
+                    </div>
+                </div>
                 <input type="hidden" name="goodsId" id="goodsId"/>
             </td>
         </tr>
@@ -71,13 +71,15 @@
 <script>
 
     function getMiaoshaPath() {
-        var goodsId = $("#goodsId").val()
+        var goodsId = $("#goodsId").val();
+        var verifyCode = $("#verifyCode").val();
         g_showLoading();
         $.ajax({
             url:"/miaosha/path",
             type:"GET",
             data:{
-                goodsId:goodsId
+                goodsId:goodsId,
+                verifyCode:verifyCode
             },
             success:function (data) {
                 if (data.code == 0) {
@@ -210,10 +212,23 @@
                 clearTimeout(timeout);
             }
             $("#miaoshaTip").html("秒杀进行中");
+            //生成验证码
+            $("#verifyCodeImg").attr("src","/miaosha/verifyCode?goodsId="+$("#goodsId").val());
+            $("#verifyCodeImg").show();
+            $("#verifyCode").show();
         } else {//秒杀已经结束
             $("#buyButton").attr("disabled", true);
             $("#miaoshaTip").html("秒杀已经结束");
+            $("#verifyCodeImg").hide();
+            $("#verifyCode").hide();
         }
+    }
+
+    /**
+     * 重新刷新验证码
+     */
+    function refreshVerifyCode(){
+        $("#verifyCodeImg").attr("src", "/miaosha/verifyCode?goodsId="+$("#goodsId").val()+"&timestamp="+new Date().getTime());
     }
 </script>
 </html>
