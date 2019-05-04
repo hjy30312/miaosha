@@ -85,7 +85,7 @@ public class MiaoshaController implements InitializingBean {
         boolean check = miaoshaService.checkVerifyCode(user, goodsId, verifyCode);
         if (!check) {
             //验证码错误
-            return Result.error(CodeMsg.REQUEST_ILLEGAL);
+            return Result.error(CodeMsg.VERIFYCODE_ERROR);
         }
         String path = miaoshaService.createMiaoshaPath(user,goodsId);
         return Result.success(path);

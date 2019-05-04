@@ -1,5 +1,5 @@
 package com.hjy.miaosha.utils;
-/*
+
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import com.aliyuncs.DefaultAcsClient;
@@ -48,6 +48,7 @@ public class SendMessageUtil {
         }
         return response;
     }
+
     public static void main(String[] args) {
         try {
             System.out.println(SendMessageUtil.sendSms("18772842517", "123456"));
@@ -55,4 +56,4 @@ public class SendMessageUtil {
             e.printStackTrace();
         }
     }
-}*/
+}

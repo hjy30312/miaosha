@@ -1,5 +1,6 @@
 package com.hjy.miaosha.service;
 
+import com.aliyuncs.exceptions.ClientException;
 import com.hjy.miaosha.dao.UserDao;
 import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.exception.GlobalException;
@@ -8,6 +9,7 @@ import com.hjy.miaosha.redis.RedisService;
 import com.hjy.miaosha.redis.UserKey;
 import com.hjy.miaosha.result.CodeMsg;
 import com.hjy.miaosha.utils.MD5Util;
+import com.hjy.miaosha.utils.SendMessageUtil;
 import com.hjy.miaosha.utils.UUIDUtil;
 import com.hjy.miaosha.vo.LoginVo;
 import lombok.extern.slf4j.Slf4j;
@@ -164,10 +166,6 @@ public class UserService {
         newUser.setNickname(user + user.getMobile());
         newUser.setRegisterDate(new Date());
         newUser.setLastLoginDate(new Date());
-        boolean flag =UserService.checkIsCorrectCode(Long.parseLong(user.getMobile()),identifyCode);
-        if (flag == false) {
-            return "验证码错误";
-        }
         int resultCount = userDao.insert(newUser);
         if (resultCount == 0) {
             return "注册失败";
@@ -183,22 +181,26 @@ public class UserService {
      * @param identifyCode 验证码
      * @return
      */
-    public static boolean checkIsCorrectCode(long mobile,String identifyCode) {
-        return true;
+    public boolean checkIsCorrectCode(long mobile,String identifyCode) {
+        String redisData  = redisService.get(UserKey.getMessage, ""+mobile, String.class);
+        if (redisData.equals(identifyCode)) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * 发送验证码  1.生成随机数 2.存入redis 3.发送
      * @param mobile
      * @return
-
+     */
     public boolean sendMessage(long mobile) throws ClientException {
         String key = String.valueOf(mobile);
         String random = UUIDUtil.getRandom6();
         redisService.set(UserKey.getMessage, key, random);
         SendMessageUtil.sendSms(key,random);
         return true;
-    }*/
+    }
 
 
 

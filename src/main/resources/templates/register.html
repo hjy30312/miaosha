@@ -34,6 +34,9 @@
             </div>
             <div class="col-md-1">
             </div>
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit" onclick="sendMessage()">点击发送验证码!</button>
+             </span>
         </div>
     </div>
 
@@ -42,6 +45,15 @@
             <label class="form-label col-md-4">请输入密码</label>
             <div class="col-md-5">
                 <input id="password" name="password" class="form-control" type="password"  placeholder="密码" required="true" minlength="6" maxlength="16" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+            <label class="form-label col-md-4">请输入验证码</label>
+            <div class="col-md-5">
+                <input id="identifyCode" name="identifyCode" class="form-control" type="text"  placeholder="验证码" required="true" minlength="6" maxlength="16" />
             </div>
         </div>
     </div>
@@ -59,6 +71,27 @@
 </body>
 
 <script>
+    function sendMessage(){
+        $.ajax({
+            url: "/user/send_message",
+            type: "POST",
+            data:{
+                mobile:$("#mobile").val()
+            },
+            success:function(data){
+                layer.closeAll();
+                if(data.code == 0){
+                    layer.msg("发送成功");
+                }else{
+                    layer.msg(data.msg);
+                }
+            },
+            error:function(){
+                layer.closeAll();
+            }
+        });
+    }
+
     function register(){
         $("#registerForm").validate({
             submitHandler:function(form){
@@ -79,7 +112,8 @@
             type: "POST",
             data:{
                 mobile:$("#mobile").val(),
-                password: password
+                password: password,
+                identifyCode:$("#identifyCode").val()
             },
             success:function(data){
                 layer.closeAll();

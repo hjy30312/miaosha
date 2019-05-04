@@ -1,6 +1,7 @@
 package com.hjy.miaosha.controller;
 
 
+import com.aliyuncs.exceptions.ClientException;
 import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.redis.MiaoshaUserKey;
 import com.hjy.miaosha.redis.RedisService;
@@ -54,13 +55,17 @@ public class UserController {
     }
 
     /**
-     * 做注册带验证码
+     * 做注册带手机验证码
      * @param user
      * @return
      */
     @RequestMapping("do_register2")
     @ResponseBody
     public Result<String> doRegister2(@Valid LoginVo user, String identifyCode) {
+        Boolean flag = userService.checkIsCorrectCode(Long.parseLong(user.getMobile()),identifyCode);
+        if (!flag) {
+            return Result.error(CodeMsg.VERIFYCODE_ERROR);
+        }
         return Result.success(userService.register(user,identifyCode));
     }
 
@@ -129,8 +134,8 @@ public class UserController {
      * 向手机号发送验证码
      * @param mobile
      * @return
-
-    @RequestMapping("send_verification_code")
+     */
+    @RequestMapping("send_message")
     @ResponseBody
     public Result<String> sendVerificationCode(long mobile){
         try {
@@ -138,6 +143,6 @@ public class UserController {
         } catch (ClientException e) {
             return Result.error(CodeMsg.MOBLIE_CHECK_ERROR);
         }
-        return Result.success("");
-    }*/
+        return Result.success("发送成功");
+    }
 }
