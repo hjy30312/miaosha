@@ -5,27 +5,21 @@ import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.rabbitmq.MQSender;
 import com.hjy.miaosha.rabbitmq.MiaoshaMessage;
 import com.hjy.miaosha.redis.GoodsKey;
-import com.hjy.miaosha.redis.MiaoshaKey;
 import com.hjy.miaosha.redis.RedisService;
 import com.hjy.miaosha.result.CodeMsg;
 import com.hjy.miaosha.result.Result;
 import com.hjy.miaosha.service.GoodsService;
 import com.hjy.miaosha.service.MiaoshaService;
 import com.hjy.miaosha.service.OrderService;
-import com.hjy.miaosha.utils.MD5Util;
-import com.hjy.miaosha.utils.UUIDUtil;
 import com.hjy.miaosha.vo.GoodsVo;
-import com.sun.deploy.net.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sun.security.provider.MD5;
 
 import javax.imageio.ImageIO;
-import javax.jws.WebParam;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -72,7 +66,9 @@ public class MiaoshaController implements InitializingBean {
     }
 
 
-
+    /**
+     * 检查验证码， 通过商品Id和用户Id生成对应秒杀路径
+     */
     @RequestMapping(value = "/path",method = RequestMethod.GET)
     @ResponseBody
     public Result<String> getMiaoshaPath(User user
@@ -99,9 +95,6 @@ public class MiaoshaController implements InitializingBean {
      * -1： 秒杀失败
      * 0：排队中
      *
-     * @param model
-     * @param user
-     * @param goodsId
      * @return
      */
     @RequestMapping(value = "/result", method = RequestMethod.GET)
@@ -119,7 +112,9 @@ public class MiaoshaController implements InitializingBean {
 
 
     /**
-     * 做秒杀操作
+     * 核心：秒杀操作  通过redis缓存减少秒杀对数据库的操作，
+     * 对数据库的操作直接放入消息队列。
+     *
      * GET POST区别：
      * GET幂等  从服务端获取数据 无论调用多少次 产生结果都是一样的不会对服务端数据产生任何影响
      * POST   向服务器端提交数据 例如：对服务器端发生变化
@@ -164,7 +159,9 @@ public class MiaoshaController implements InitializingBean {
     }
 
 
-
+    /**
+     * 运算验证码
+     */
     @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
     @ResponseBody
     public Result<String> getMiaoshaVerifyCode(HttpServletResponse response, User user,
