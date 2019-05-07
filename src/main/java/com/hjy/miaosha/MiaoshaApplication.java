@@ -10,5 +10,4 @@ public class MiaoshaApplication  {
         SpringApplication.run(MiaoshaApplication.class, args);
     }
 
-
 }

@@ -35,11 +35,8 @@
             <div class="col-md-1">
             </div >
             <span class="input-group-btn">
-                <button  class="btn btn-default" type="submit" onclick="sendMessage()">点击发送验证码!</button>
-             </span>
-            <span class="input-group-btn">
-                <button  id="btn1" name = "btn1" class="btn btn-default" type="submit" onclick="test(60)">点击</button>
-             </span>
+                <button id="send_btn" name = "send_btn" class="btn btn-default" type="submit" onclick="sendMessage()">发送手机动态验证码</button>
+            </span>
         </div>
     </div>
 
@@ -75,14 +72,14 @@
 
 <script>
 
-    function test(time) {
-        var btn = $("#btn1");
+    function time(time) {
+        var btn = $("#send_btn");
         btn.attr("disabled", true);  //按钮禁止点击
-        btn.val(time <= 0 ? "发送动态密码" : ("" + (time) + "秒后可发送"));
+        btn.val(time <= 0 ? "发送手机动态验证码" : ("" + (time) + "秒后可发送"));
         var hander = setInterval(function() {
             if (time <= 0) {
                 clearInterval(hander); //清除倒计时
-                btn.val("发送动态密码");
+                btn.text("发送动态密码");
                 btn.attr("disabled", false);
                 return false;
             }else {
@@ -102,6 +99,7 @@
                 if(data.code == 0){
                     $("#send_message").attr("disabled",false); //按钮失效
                     layer.msg("发送成功");
+                    time(60);
                 }else{
                     layer.msg(data.msg);
                 }
