@@ -1,23 +1,26 @@
 package com.hjy.miaosha.controller;
 
+import com.hjy.miaosha.domain.Goods;
+import com.hjy.miaosha.domain.MiaoshaGoods;
 import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.redis.GoodsKey;
 import com.hjy.miaosha.redis.RedisService;
+import com.hjy.miaosha.result.CodeMsg;
 import com.hjy.miaosha.result.Result;
 import com.hjy.miaosha.service.GoodsService;
 import com.hjy.miaosha.service.UserService;
 import com.hjy.miaosha.vo.GoodsDetailVo;
 import com.hjy.miaosha.vo.GoodsVo;
+import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.context.ApplicationContext;
 import org.thymeleaf.context.IWebContext;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
@@ -28,9 +31,8 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/goods")
+@Log
 public class GoodController {
-
-    Logger logger = LoggerFactory.getLogger(GoodController.class);
 
     @Autowired
     UserService userService;
@@ -63,7 +65,7 @@ public class GoodController {
          // return "goods_list";
         IWebContext ctx = new WebContext(request,response,  request.getServletContext(),request.getLocale(), model.asMap());
         //手动渲染
-        html = thymeleafViewResolver.getTemplateEngine().process("goods_list",ctx);
+        html = thymeleafViewResolver.getTemplateEngine().process("index1",ctx);
         if (!StringUtils.isEmpty(html)) {
             redisService.set(GoodsKey.getGoodsList, "" , html);
         }
@@ -71,13 +73,12 @@ public class GoodController {
     }
 
     /**
-     * 页面静态化 未缓存
+     * 页面静态化
      * @return
      */
     @RequestMapping(value = "/detail/{goodsId}")
     @ResponseBody
-    public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response, Model model, User user,
-                                          @PathVariable("goodsId") long goodsId) {
+    public Result<GoodsDetailVo> detail(User user, @PathVariable("goodsId") long goodsId) {
         GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
         long startAt = goods.getStartDate().getTime();
         long endAt = goods.getEndDate().getTime();
@@ -106,5 +107,25 @@ public class GoodController {
         detailVo.setRemainSeconds(remainSeconds);
         detailVo.setMiaoshaStatus(miaoshaStatus);
         return Result.success(detailVo);
+    }
+
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    @ResponseBody
+    public Result<String> insert(Goods goods) {
+        boolean flag = goodsService.insert(goods);
+        if (flag) {
+            return Result.success(CodeMsg.GOODS_INSETRT_SUCCESS.getMsg());
+        }
+        return Result.error(CodeMsg.GOODS_INSESRT_ERROR);
+    }
+
+    @RequestMapping(value = "miaosha/insert", method = RequestMethod.POST)
+    @ResponseBody
+    public Result<String> miaoshaInsert(MiaoshaGoods goods) {
+        boolean flag = goodsService.miaoshaInsert(goods);
+        if (flag) {
+            return Result.success(CodeMsg.MIAOSHA_GOODS_INSETRT_SUCCESS.getMsg());
+        }
+        return Result.error(CodeMsg.MIAOSHA_GOODS_INSESRT_ERROR);
     }
 }

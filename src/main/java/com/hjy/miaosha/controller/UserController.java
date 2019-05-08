@@ -66,7 +66,7 @@ public class UserController {
         if (!flag) {
             return Result.error(CodeMsg.VERIFYCODE_ERROR);
         }
-        return Result.success(userService.register(user,identifyCode));
+        return Result.success(userService.register(user));
     }
 
     /**

@@ -23,8 +23,14 @@
     <div class="panel-heading">秒杀订单详情</div>
     <table class="table" id="goodslist">
         <tr>
+            <td>商户订单</td>
+            <td colspan="3" name="outTradeNo" id="outTradeNo">
+            </td>
+        </tr>
+        <tr>
             <td>商品名称</td>
-            <td colspan="3" id="goodsName"></td>
+            <td colspan="3" name="goodsName" id="goodsName">
+            </td>
         </tr>
         <tr>
             <td>商品图片</td>
@@ -32,7 +38,8 @@
         </tr>
         <tr>
             <td>订单价格</td>
-            <td colspan="2" id="orderPrice"></td>
+            <td colspan="2" name="orderPrice" id="orderPrice">
+            </td>
         </tr>
         <tr>
             <td>下单时间</td>
@@ -43,7 +50,7 @@
             <td id="orderStatus">
             </td>
             <td>
-                <button class="btn btn-primary btn-block" type="submit" id="payButton">立即支付</button>
+                <button class="btn btn-primary btn-block" type="button" id="payButton" onclick="pay()">立即支付</button>
             </td>
         </tr>
         <tr>
@@ -62,9 +69,15 @@
     function render(detail) {
         var goods = detail.goods;
         var order = detail.order;
+        var outTradeNo = g_getQueryString("orderId");
+        console.log(goods);
+        console.log(order);
+        $("#goodsName").val(goods.goodsName);
+        $("#outTradeNo").text(outTradeNo);
         $("#goodsName").text(goods.goodsName);
         $("#goodsImg").attr("src", goods.goodsImg);
         $("#orderPrice").text(order.goodsPrice);
+        $("#orderPrice").val(order.goodsPrice);
         $("#createDate").text(new Date(order.createDate).format("yyyy-MM-dd hh:mm:ss"));
         var status = "";
         if (order.status == 0) {
@@ -79,7 +92,33 @@
     $(function () {
         getOrderDetail();
     })
+    
+    function pay() {
+        var outTradeNo = g_getQueryString("orderId");
+        var subject =   $("#goodsName").val(); //订单名称
+        var totalAmount = $("#orderPrice").val();
 
+        $.ajax({
+            url: "/order/alipay",
+            type: "POST",
+            dataType:"html",
+            data: {
+                outTradeNo: outTradeNo,
+                subject:subject,
+                totalAmount:totalAmount
+            },
+            success: function (data) {
+                console.log(1);
+                document.write(data);
+                document.close();
+            },
+            error: function () {
+                console.log(2);
+                layer.msg("客户端请求有误");
+            }
+        });
+    }
+    
     function getOrderDetail() {
         var orderId = g_getQueryString("orderId");
         $.ajax({
@@ -100,6 +139,4 @@
             }
         });
     }
-
-
 </script>

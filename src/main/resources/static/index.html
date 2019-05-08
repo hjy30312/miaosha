@@ -1,42 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>首页</title>
+    <link  rel="stylesheet" href="style/reset.css" />
+    <link  rel="stylesheet" href="style/main.css" />
+    <!-- jquery -->
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+    <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <!-- jquery-validator -->
+    <script type="text/javascript" th:src="@{/jquery-validation/jquery.validate.min.js}"></script>
+    <script type="text/javascript" th:src="@{/jquery-validation/localization/messages_zh.min.js}"></script>
+    <!-- layer -->
+    <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+    <!-- md5.js -->
+    <script type="text/javascript" th:src="@{/js/md5.min.js}"></script>
+    <!-- common.js -->
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+
 </head>
+
 <body>
-<H1>支付测试</H1>
-<hr>
-<div class="form-container">
-    <form id="form" action="order/alipay" method="post">
-        *商户订单 :
-        <input type="text" name="outTradeNo" value="dzcp100010001"><br>
-        *订单名称 :
-        <input type="text" name="subject" value="红魔手机"><br>
-        *付款金额 :
-        <input type="text" name="totalAmount" value="0.1" ><br>
-        *商品描述 :
-        <input type="text" name="body" value="红魔手机 努比亚出品游戏手机"><br>
-        <input type="button" value="支付宝支付" onclick="submitForm('order/alipay')">
-        <input type="button" value=" 微信支付  " onclick="submitForm('order/wexpay')">
-    </form>
+<div class="headerBar">
+    <div class="topBar">
+        <div class="comWidth">
+            <div class="leftArea">
+                <a href="#" class="collection">收藏慕课</a>
+            </div>
+            <div class="rightArea">
+                欢迎来到慕课网！<a href="#">[登入]</a> <a href="#">[免费注册]</a>
+            </div>
+        </div>
+    </div>
+    <div class="logoBar">
+        <div class="comWidth">
+            <div class="logo fl">
+                <a href="#"><img src="images/icon/慕课网.png" alt="慕课网"  /></a>
+            </div>
+            <div class="search_box fl">
+                <input type="text" class="search_text fl" />
+                <input type="button" class="search_btn fr" value="搜 索" />
+            </div>
+            <div class="shopCar fr">
+                <span class="shopText fl">购物车</span>
+                <span class="shopNum fl">0</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">秒杀商品列表</div>
+    <table class="table" id="goodslist">
+        <tr>
+            <td>商品名称</td>
+            <td>商品图片</td>
+            <td>商品原价</td>
+            <td>秒杀价</td>
+            <td>库存数量</td>
+            <td>详情</td>
+        </tr>
+        <tr  th:each="goods,goodsStat : ${goodsList}">
+            <td th:text="${goods.goodsName}"></td>
+            <td ><img th:src="@{${goods.goodsImg}}" width="100" height="100" /></td>
+            <td th:text="${goods.goodsPrice}"></td>
+            <td th:text="${goods.miaoshaPrice}"></td>
+            <td th:text="${goods.stockCount}"></td>
+            <td><a th:href="'/goods_detail.htm?goodsId='+${goods.id}">详情</a></td>
+        </tr>
+    </table>
+</div>
+
+<div class="footer">
+    <p><a href="#">慕课简介</a><i>|</i><a href="#">慕课公告</a><i>|</i><a href="#">招纳贤士</a><i>|</i><a href="#">联系我们</a><i>|</i>客服热线：400-675-1234</p>
+    <p>Copyright&copy;2006 - 2014 慕课版权所有&nbsp;&nbsp;&nbsp;京ICP备09037834号&nbsp;&nbsp;&nbsp;京ICP证B1034-8373号&nbsp;&nbsp;&nbsp;某市公安局XX分局备案编号：123456789123</p>
+
+    <p class="web"><a href="#"><img src="images/footer.gif" alt="logo"  /></a><a href="#"><img src="images/footer.gif"  /></a><a href="#"><img src="images/footer.gif"  /></a><a href="#"><img src="images/footer.gif"  /></a></p>
 </div>
 </body>
-
-<script language="javascript">
-    function submitForm(action) {
-        document.getElementById("form").action = action
-        document.getElementById("form").submit()
-    }
-</script>
-
-<style>
-    .form-container {
-        padding-top:10px;
-    }
-    input {
-        margin:10px;
-
-    }
-</style>
 </html>

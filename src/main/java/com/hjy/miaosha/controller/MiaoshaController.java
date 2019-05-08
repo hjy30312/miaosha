@@ -5,12 +5,14 @@ import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.rabbitmq.MQSender;
 import com.hjy.miaosha.rabbitmq.MiaoshaMessage;
 import com.hjy.miaosha.redis.GoodsKey;
+import com.hjy.miaosha.redis.MiaoshaKey;
 import com.hjy.miaosha.redis.RedisService;
 import com.hjy.miaosha.result.CodeMsg;
 import com.hjy.miaosha.result.Result;
 import com.hjy.miaosha.service.GoodsService;
 import com.hjy.miaosha.service.MiaoshaService;
 import com.hjy.miaosha.service.OrderService;
+import com.hjy.miaosha.utils.UUIDUtil;
 import com.hjy.miaosha.vo.GoodsVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,10 +152,24 @@ public class MiaoshaController implements InitializingBean {
         if (order != null) {
             return Result.error(CodeMsg.REPEATE_MIAOSHA);
         }
-        // 入队
+
+        // 入队前  服务器时间戳
+        long date = System.currentTimeMillis();
+        //生成随机数
+        String rand = UUIDUtil.getRandom(2);
+        String score = date + "." + rand;
+        double realScore = Double.parseDouble(score);
+
+        // 入队消息
         MiaoshaMessage message = new MiaoshaMessage();
         message.setGoodsId(goodsId);
         message.setUser(user);
+        message.setDate(date);
+
+
+        //设置  键值对
+        redisService.zadd(MiaoshaKey.isGoodsMiaoshaSort,realScore,String.valueOf(goodsId),message);
+
         //放入消息队列   在里面进行有关数据库的操作
         sender.sendMiaoshaMessage(message);
         return Result.success(0);
@@ -181,7 +198,6 @@ public class MiaoshaController implements InitializingBean {
             return Result.error(CodeMsg.MIAOSHA_FAIL);
         }
     }
-
 
 
 }

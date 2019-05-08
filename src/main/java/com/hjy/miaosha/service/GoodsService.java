@@ -37,4 +37,14 @@ public class GoodsService {
         int flag = goodsDao.reduceStock(g);
         return flag > 0;
     }
+
+    public boolean insert(Goods goods) {
+        int flag = goodsDao.insert(goods);
+        return flag > 0;
+    }
+    public boolean miaoshaInsert(MiaoshaGoods goods) {
+        int flag = goodsDao.miaoshaInsert(goods);
+        return flag > 0;
+    }
+
 }

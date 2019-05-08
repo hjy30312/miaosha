@@ -58,6 +58,28 @@ public class RedisService {
 		 }
 	}
 
+	public <T> boolean zadd(KeyPrefix prefix, double score,String key,  T value) {
+		Jedis jedis = null;
+		try {
+			jedis =  jedisPool.getResource();
+			String str = beanToString(value);
+			if(str == null || str.length() <= 0) {
+				return false;
+			}
+			//生成真正的key
+			String realKey  = prefix.getPrefix() + key;
+			int seconds =  prefix.expireSeconds();
+			if(seconds <= 0) {
+				jedis.zadd(realKey, score,str);
+			}else {
+				jedis.zadd(realKey, score,str);
+			}
+			return true;
+		}finally {
+			returnToPool(jedis);
+		}
+	}
+
 	/**
 	 * 删除key是否存在
 	 * */

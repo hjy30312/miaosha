@@ -3,8 +3,6 @@ package com.hjy.miaosha.alipay;
 /**
  * 支付实体对象
  * 根据支付宝接口协议，其中的属性名，必须使用下划线，不能修改
- * @author Louis
- * @date Dec 12, 2018
  */
 public class AlipayBean {
     

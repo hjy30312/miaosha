@@ -27,16 +27,16 @@ public class MQReceiver {
 
     @RabbitListener(queues = MQConfig.MIAOSHA_QUEUE)
     public void receive(String message) {
-        log.info("receive message:" + message);
         MiaoshaMessage mes = RedisService.stringToBean(message, MiaoshaMessage.class);
         Long goodsId = mes.getGoodsId();
         User user = mes.getUser();
-        log.info("bebug");
         GoodsVo goodsVo = goodsService.getGoodsVoByGoodsId(goodsId);
         int stock = goodsVo.getStockCount();
         if (stock <= 0) {
             return;
         }
+        //大并发情况下  可能发生相同时间戳的情况   获取顺序队列  拿到用户id
+
         //判断是否已经秒杀到了
         MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
         if (order != null) {
@@ -44,7 +44,9 @@ public class MQReceiver {
         }
         //减库存 生成秒杀订单
         miaoshaService.miaosha(user, goodsVo);
+
     }
+
 
 
     /**

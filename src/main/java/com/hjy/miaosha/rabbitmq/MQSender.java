@@ -4,8 +4,6 @@ package com.hjy.miaosha.rabbitmq;
 import com.hjy.miaosha.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +16,6 @@ public class MQSender {
 
     public void sendMiaoshaMessage(MiaoshaMessage message) {
         String msg = RedisService.beanToString(message);
-        log.info("send message:" + msg);
         amqpTemplate.convertAndSend(MQConfig.MIAOSHA_QUEUE,msg);
     }
 

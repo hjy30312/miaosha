@@ -1,12 +1,10 @@
 package com.hjy.miaosha.dao;
 
 
+import com.hjy.miaosha.domain.Goods;
 import com.hjy.miaosha.domain.MiaoshaGoods;
 import com.hjy.miaosha.vo.GoodsVo;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -21,4 +19,12 @@ public interface GoodsDao {
 
     @Update("update miaosha_goods set stock_count = stock_count - 1 where goods_id = #{goodsId} and stock_count > 0")
     int reduceStock(MiaoshaGoods g);
+
+    @Insert("insert into goods(goods_name, goods_title, goods_img, goods_detail, goods_price, goods_stock)values("
+            + "#{goodsName}, #{goodsTitle}, #{goodsImg},#{goodsDetail} ,#{goodsPrice},#{goodsStock})")
+    int insert(Goods goods);
+
+    @Insert("insert into miaosha_goods(goods_id, miaosha_price,stock_count,start_date,end_date)values("
+            + "#{goodsId},#{miaoshaPrice},#{stockCount},#{startDate},#{endDate})")
+    int miaoshaInsert(MiaoshaGoods goods);
 }

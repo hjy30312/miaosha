@@ -13,6 +13,7 @@ public class MQConfig {
 
     public static final String MIAOSHA_QUEUE = "miaosha.queue";
 
+
     public static final String QUQUE = "queue";
 
     public static final String TOPIC_QUQUE1 = "topic.queue1";

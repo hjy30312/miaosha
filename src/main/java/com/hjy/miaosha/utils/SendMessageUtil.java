@@ -40,7 +40,6 @@ public class SendMessageUtil {
         CommonResponse response = null;
         try {
             response = client.getCommonResponse(request);
-            System.out.println(response.getData());
         } catch (ServerException e) {
             e.printStackTrace();
         } catch (ClientException e) {

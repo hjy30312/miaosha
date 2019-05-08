@@ -37,27 +37,28 @@ public class UserService {
 
     public User getById(long id) {
         //取缓存
-        User user = redisService.get(MiaoshaUserKey.getById, ""+id, User.class);
+        User user = redisService.get(MiaoshaUserKey.getById, "" + id, User.class);
         if (user != null) {
             return user;
         }
         //取数据库
         user = userDao.getById(id);
         if (user != null) {
-            redisService.set(MiaoshaUserKey.getById, ""+id, user);
+            redisService.set(MiaoshaUserKey.getById, "" + id, user);
         }
         return user;
     }
 
     /**
      * 先更新数据库 再删除相对应缓存
+     *
      * @param id
      * @param formPass
      * @return
      */
     public boolean updatePassword(long id, String formPass) {
         //取user
-        User  user = getById(id);
+        User user = getById(id);
         if (user == null) {
             throw new GlobalException(CodeMsg.MOBLIE_NOT_EXIST);
         }
@@ -67,102 +68,74 @@ public class UserService {
         toBeUpdate.setPassword(MD5Util.formPassToDBPass(formPass, user.getSalt()));
         userDao.update(toBeUpdate);
         //处理缓存  删除
-        redisService.delete(MiaoshaUserKey.getById,""+id);
+        redisService.delete(MiaoshaUserKey.getById, "" + id);
         return true;
     }
 
 
-
-
-    public String login(HttpServletResponse response,LoginVo loginVo) {
+    public String login(HttpServletResponse response, LoginVo loginVo) {
         if (loginVo == null) {
-            throw  new GlobalException(CodeMsg.SERVER_ERROR);
+            throw new GlobalException(CodeMsg.SERVER_ERROR);
         }
         String mobile = loginVo.getMobile();
         String formPass = loginVo.getPassword();
         //判断手机号是否存在
         User user = getById(Long.parseLong(mobile));
         if (user == null) {
-            throw  new GlobalException(CodeMsg.MOBLIE_NOT_EXIST);
+            throw new GlobalException(CodeMsg.MOBLIE_NOT_EXIST);
         }
         //验证密码
         String dbPass = user.getPassword();
         String slatDB = user.getSalt();
-        log.info("formPass:" + formPass);
-        String calcPass = MD5Util.formPassToDBPass(formPass,slatDB);
-        log.info("dbPass:" + dbPass + ",calcPass:" + calcPass);
+        String calcPass = MD5Util.formPassToDBPass(formPass, slatDB);
         if (!calcPass.equals(dbPass)) {
-            throw  new GlobalException(CodeMsg.PASSWORD_ERROR);
+            throw new GlobalException(CodeMsg.PASSWORD_ERROR);
         }
 
         //生成cookie
         String token = UUIDUtil.uuid();
-        addCookie(response,token,user);
+        addCookie(response, token, user);
         return token;
     }
 
-    public User getByToken(HttpServletResponse response,String token) {
+    public User getByToken(HttpServletResponse response, String token) {
         if (StringUtils.isEmpty(token)) {
             return null;
         }
-        User user = redisService.get(MiaoshaUserKey.token,token,User.class);
+        User user = redisService.get(MiaoshaUserKey.token, token, User.class);
         //延长有效区
-        if (user!=null) {
+        if (user != null) {
             addCookie(response, token, user);
         }
         return user;
     }
 
 
-    private void addCookie(HttpServletResponse response,String token,User user) {
-        redisService.set(MiaoshaUserKey.token,token,user);
-        Cookie cookie = new Cookie(COOKI_NAME_TOKEN,token);
+    private void addCookie(HttpServletResponse response, String token, User user) {
+        redisService.set(MiaoshaUserKey.token, token, user);
+        Cookie cookie = new Cookie(COOKI_NAME_TOKEN, token);
         cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
         //设置到根目录
         cookie.setPath("/");
         response.addCookie(cookie);
     }
 
+    @Transactional
     public String register(LoginVo user) {
         if (user == null) {
-            throw  new GlobalException(CodeMsg.SERVER_ERROR);
+            throw new GlobalException(CodeMsg.SERVER_ERROR);
         }
         String mobile = user.getMobile();
 
         //判断手机号是否存在
         User user1 = userDao.getById(Long.parseLong(mobile));
         if (user1 != null) {
-            throw  new GlobalException(CodeMsg.MOBLIE_EXIST);
+            throw new GlobalException(CodeMsg.MOBLIE_EXIST);
         }
         User newUser = new User();
         newUser.setId(Long.parseLong(user.getMobile()));
-        newUser.setPassword(MD5Util.formPassToDBPass(user.getPassword(),"1a2b3c4d"));
-        newUser.setNickname(user + user.getMobile());
-        newUser.setRegisterDate(new Date());
-        newUser.setLastLoginDate(new Date());
-
-        int resultCount = userDao.insert(newUser);
-        if (resultCount == 0) {
-            return "注册失败";
-        }
-        return "注册成功";
-    }
-
-    @Transactional
-    public String register(LoginVo user, String identifyCode) {
-        if (user == null) {
-            throw  new GlobalException(CodeMsg.SERVER_ERROR);
-        }
-        String mobile = user.getMobile();
-
-        //判断手机号是否存在
-        User user1 = userDao.getById(Long.parseLong(mobile));
-        if (user1 != null) {
-            throw  new GlobalException(CodeMsg.MOBLIE_EXIST);
-        }
-        User newUser = new User();
-        newUser.setId(Long.parseLong(user.getMobile()));
-        newUser.setPassword(MD5Util.formPassToDBPass(user.getPassword(),"1a2b3c4d"));
+        newUser.setPassword(MD5Util.formPassToDBPass(user.getPassword(), "1a2b3c4d"));
+        newUser.setSalt("1a2b3c4d");
         newUser.setNickname(user + user.getMobile());
         newUser.setRegisterDate(new Date());
         newUser.setLastLoginDate(new Date());
@@ -176,13 +149,14 @@ public class UserService {
 
     /**
      * 检查验证码 通过手机号去缓存数据库中找相对应的
+     * 验证码，返回比较情况
      *
-     * @param mobile 手机号
+     * @param mobile       手机号
      * @param identifyCode 验证码
      * @return
      */
-    public boolean checkIsCorrectCode(long mobile,String identifyCode) {
-        String redisData  = redisService.get(UserKey.getMessage, ""+mobile, String.class);
+    public boolean checkIsCorrectCode(long mobile, String identifyCode) {
+        String redisData = redisService.get(UserKey.getMessage, "" + mobile, String.class);
         if (redisData.equals(identifyCode)) {
             return true;
         }
@@ -191,18 +165,17 @@ public class UserService {
 
     /**
      * 发送验证码  1.生成随机数 2.存入redis 3.发送
+     *
      * @param mobile
      * @return
      */
     public boolean sendMessage(long mobile) throws ClientException {
         String key = String.valueOf(mobile);
-        String random = UUIDUtil.getRandom6();
+        String random = UUIDUtil.getRandom(6);
         redisService.set(UserKey.getMessage, key, random);
-        SendMessageUtil.sendSms(key,random);
+        SendMessageUtil.sendSms(key, random);
         return true;
     }
-
-
 
 
 }
