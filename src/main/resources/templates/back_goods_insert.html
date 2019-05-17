@@ -269,9 +269,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="table.html"><i class="fa fa-table"></i> Responsive Tables</a>
-                    </li>
+
                     <li>
                         <a href="#"><i class="fa fa-sitemap"></i> 用户管理<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
@@ -329,25 +327,29 @@
                                     <form role="form">
                                         <div class="form-group">
                                             <label>商品名称</label>
-                                            <input class="form-control">
+                                            <input id="goodsName" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>商品标题</label>
+                                            <input id="goodsTitle" class="form-control">
                                         </div>
                                         <div class="form-group">
                                             <label>商品价格</label>
-                                            <input class="form-control" placeholder="Enter text">
+                                            <input id="goodsPrice" class="form-control" placeholder="Enter text">
                                         </div>
 										<div class="form-group">
                                             <label>商品库存</label>
-                                            <input class="form-control" placeholder="Enter text">
+                                            <input id="goodsStock" class="form-control" placeholder="Enter text">
                                         </div>
                                         <div class="form-group">
                                             <label>商品详情</label>
-                                            <textarea class="form-control" rows="3"></textarea>
+                                            <textarea id="goodsDetail"class="form-control" rows="3"></textarea>
                                         </div>
 										<div>
 											<div class="col-md-5">
 											</div>
 											<div class="col-md-2">
-												<button type="button" class="btn btn-default">添加</button>
+												<button type="button" class="btn btn-default" onclick="insertGoods()">添加</button>
 											</div>
 											<div class="col-md-5">
 											</div>
@@ -372,4 +374,41 @@
         </div>
      <!-- /. WRAPPER  -->
 </body>
+
+<script>
+
+    //展示loading
+    function g_showLoading(){
+        var idx = layer.msg('处理中...', {icon: 16,shade: [0.5, '#f5f5f5'],scrollbar: false,offset: '0px', time:100000}) ;
+        return idx;
+    }
+
+    function insertGoods() {
+        var goodsName = $("#goodsName").val();
+        var goodsTitle = $("#goodsTitle").val();
+        var goodsDetail = $("#goodsDetail").val();
+        var goodsPrice = $("#goodsPrice").val();
+        var goodsStock = $("#goodsStock").val();
+        g_showLoading();
+        $.ajax({
+            url:"/back/goods/insert",
+            type:"POST",
+            data:{
+                goodsName:goodsName,
+                goodsTitle:goodsTitle,
+                goodsDetail:goodsDetail,
+                goodsPrice:goodsPrice,
+                goodsStock:goodsStock
+            },
+            success:function (data) {
+                if (data.code == 0) {
+                    layer.msg("添加商品成功！");
+                } else {
+                    layer.msg("添加商品失败！");
+                }
+            }
+        })
+    }
+
+</script>
 </html>
