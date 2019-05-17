@@ -59,8 +59,8 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     /**
      * 从cookie里获取以cookiName为键的值
-     * @param request
-     * @param cookiName
+     * @param request 客户端请求对象
+     * @param cookiName  保存用户信息标识符value的key
      * @return
      */
     private String getCookieValue(HttpServletRequest request, String cookiName) {

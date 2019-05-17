@@ -85,7 +85,6 @@ public class UserController {
     @RequestMapping("do_login")
     @ResponseBody
     public Result<String> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
-        logger.info(loginVo.toString());
         String token =  userService.login(response,loginVo);
         return Result.success(token);
     }

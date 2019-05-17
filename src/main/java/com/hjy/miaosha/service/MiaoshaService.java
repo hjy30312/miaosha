@@ -171,8 +171,6 @@ public class MiaoshaService {
 
     /**
      * + - *  生成操作数
-     * @param rdm
-     * @return
      */
     private String generateVerifyCode(Random rdm) {
         int num1 = rdm.nextInt(10);

@@ -49,6 +49,12 @@ public class GoodController {
     @Autowired
     ApplicationContext applicationContext;
 
+    /**
+     * 显示商品列表时
+     * 1。先从缓存中获取
+     * 2。如果没有则从数据库中获取并放入缓存
+     * 3。数据渲染html
+     */
     @RequestMapping(value = "/to_list", produces = "text/html")
     @ResponseBody
     public String list(HttpServletRequest request, HttpServletResponse response,
@@ -71,6 +77,20 @@ public class GoodController {
         }
         return html;
     }
+
+    @RequestMapping(value = "/to_search_list")
+    public String search(Model model, User user, String name) {
+        model.addAttribute("user", user);
+        // 查询商品列表
+        List<GoodsVo> goodVoList =  goodsService.listGoodsVoByName(name);
+        model.addAttribute("goodsList", goodVoList);
+        return "goods_list";
+    }
+
+
+
+
+
 
     /**
      * 页面静态化
@@ -109,15 +129,14 @@ public class GoodController {
         return Result.success(detailVo);
     }
 
-    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public Result<String> insert(Goods goods) {
-        boolean flag = goodsService.insert(goods);
-        if (flag) {
-            return Result.success(CodeMsg.GOODS_INSETRT_SUCCESS.getMsg());
-        }
-        return Result.error(CodeMsg.GOODS_INSESRT_ERROR);
+    public Result<Boolean> deleteGoodsById(@PathVariable("goodsId")Long goodsId){
+        return Result.success(goodsService.deleteById(goodsId));
     }
+
+
+
 
     @RequestMapping(value = "miaosha/insert", method = RequestMethod.POST)
     @ResponseBody

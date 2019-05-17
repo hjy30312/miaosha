@@ -7,12 +7,15 @@ import com.hjy.miaosha.domain.User;
 import com.hjy.miaosha.redis.OrderKey;
 import com.hjy.miaosha.redis.RedisService;
 import com.hjy.miaosha.vo.GoodsVo;
+import com.mysql.cj.x.protobuf.MysqlxCrud;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -57,4 +60,18 @@ public class OrderService {
     public OrderInfo getOrderById(long orderId) {
         return orderDao.getOrderById(orderId);
     }
+
+
+    public List<OrderInfo> getOrderList() {
+        return orderDao.getOrderInfoList();
+    }
+
+    public Boolean deleteOrderById(long id) {
+        int falg = orderDao.deleteOrderById(id);
+        if (falg > 0) {
+            return true;
+        }
+        return false;
+    }
+
 }

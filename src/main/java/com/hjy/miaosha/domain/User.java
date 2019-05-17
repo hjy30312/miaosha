@@ -33,6 +33,10 @@ public class User {
 
     public User() {
     }
+    public User(Long id, String password) {
+        this.id = id;
+        this.password = password;
+    }
 
     public User(Long id, String nickname, String password, String salt, String head, Date registerDate, Date lastLoginDate, Integer loginCount) {
         this.id = id;

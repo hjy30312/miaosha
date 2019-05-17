@@ -121,6 +121,8 @@ public class MiaoshaController implements InitializingBean {
      * GET POST区别：
      * GET幂等  从服务端获取数据 无论调用多少次 产生结果都是一样的不会对服务端数据产生任何影响
      * POST   向服务器端提交数据 例如：对服务器端发生变化
+     * QPS: 2114
+     * 5000 * 10
      */
     @RequestMapping(value = "/{path}/do_miaosha", method = RequestMethod.POST)
     @ResponseBody
@@ -198,6 +200,52 @@ public class MiaoshaController implements InitializingBean {
             return Result.error(CodeMsg.MIAOSHA_FAIL);
         }
     }
+
+
+    /**
+     * 测试
+     * @return
+     */
+    @RequestMapping(value = "/do_miaosha", method = RequestMethod.POST)
+    @ResponseBody
+    public Result<Integer> miaosha(@RequestParam("goodsId") long goodsId) {
+        long id = Long.parseLong(UUIDUtil.getRandom(11));
+        User user = new User((long) id,"321321123213232132132132123231321");
+        if (user == null) {
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+
+        //内存标记，减少redis访问
+        boolean overFlag = localOverMap.get(goodsId);
+        if (overFlag) {
+            return Result.error(CodeMsg.MIAO_SHA_OVER);
+        }
+        // 预减库存
+        long stock = redisService.decr(GoodsKey.getMiaoshaGoodsStock, "" + goodsId);
+        if (stock < 0) {
+            localOverMap.put(goodsId, true);   //标记已经没有库存了
+            return Result.error(CodeMsg.MIAO_SHA_OVER);
+        }
+
+
+        GoodsVo goodsVo = goodsService.getGoodsVoByGoodsId(goodsId);
+        int stock1 = goodsVo.getStockCount();
+        if (stock1 <= 0) {
+            return Result.error(CodeMsg.MIAO_SHA_OVER);
+        }
+
+        //判断是否已经秒杀到了
+        MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
+        if (order != null) {
+            return Result.error(CodeMsg.MIAO_SHA_OVER);
+        }
+        //减库存 生成秒杀订单
+        miaoshaService.miaosha(user, goodsVo);
+
+        return Result.success(0);
+    }
+
+
 
 
 }

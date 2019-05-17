@@ -5,6 +5,7 @@ import com.hjy.miaosha.domain.Goods;
 import com.hjy.miaosha.domain.MiaoshaGoods;
 import com.hjy.miaosha.vo.GoodsVo;
 import org.apache.ibatis.annotations.*;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -27,4 +28,11 @@ public interface GoodsDao {
     @Insert("insert into miaosha_goods(goods_id, miaosha_price,stock_count,start_date,end_date)values("
             + "#{goodsId},#{miaoshaPrice},#{stockCount},#{startDate},#{endDate})")
     int miaoshaInsert(MiaoshaGoods goods);
+
+
+    @Delete("delete from goods where id = #{goodsId}")
+    int deleteGoodsById(@Param("goodsId")Long goodsId);
+
+    @Select("select * from goods where goods_name like #{goodsName}")
+    List<GoodsVo> listGoodsVoByName(@Param("goodsName")String goodsName);
 }

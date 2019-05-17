@@ -148,7 +148,6 @@
                 layer.msg("客户端请求有误");
             }
         });
-
     }
 
     function render(detail) {
@@ -196,6 +195,7 @@
     function countDown() {
         var remainSeconds = $("#remainSeconds").val();
         var timeout;
+        console.log("" + remainSeconds);
         if (remainSeconds > 0) {//秒杀还没开始，倒计时
             $("#buyButton").attr("disabled", true);
             $("#miaoshaTip").html("秒杀倒计时：" + remainSeconds + "秒");

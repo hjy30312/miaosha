@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 
 @Service
@@ -98,6 +99,9 @@ public class UserService {
         return token;
     }
 
+    /**
+     * 从redis中获取用户信息
+     */
     public User getByToken(HttpServletResponse response, String token) {
         if (StringUtils.isEmpty(token)) {
             return null;
@@ -110,7 +114,13 @@ public class UserService {
         return user;
     }
 
-
+    /**
+     *  1.设置redis缓存，tk+token为key，用户信息为value， 过期时间为2天
+     *  2.设置用户浏览器Cookie，"token"为key，token为value。
+     * @param response 服务器的响应
+     * @param token 生成的随机数
+     * @param user 用户信息
+     */
     private void addCookie(HttpServletResponse response, String token, User user) {
         redisService.set(MiaoshaUserKey.token, token, user);
         Cookie cookie = new Cookie(COOKI_NAME_TOKEN, token);
@@ -178,4 +188,8 @@ public class UserService {
     }
 
 
+    public List<User> getList() {
+        return  userDao.getList();
+
+    }
 }

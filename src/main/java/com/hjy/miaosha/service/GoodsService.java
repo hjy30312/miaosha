@@ -18,7 +18,6 @@ public class GoodsService {
 
     public List<GoodsVo> listGoodsVo() {
         return goodsDao.listGoodsVo();
-
     }
 
     /**
@@ -47,4 +46,13 @@ public class GoodsService {
         return flag > 0;
     }
 
+    public Boolean deleteById(Long goodsId) {
+        int flag = goodsDao.deleteGoodsById(goodsId);
+        return flag > 0;
+    }
+
+    public List<GoodsVo> listGoodsVoByName(String name) {
+        String key = new StringBuilder().append("%").append(name).append("%").toString();
+        return goodsDao.listGoodsVoByName(key);
+    }
 }

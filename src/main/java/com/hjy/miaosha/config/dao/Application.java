@@ -7,13 +7,13 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-@ServletComponentScan
-@EnableWebMvc
-@SpringBootApplication
-@MapperScan("com.hjy.miaosha.config.dao")
-public class Application extends WebMvcConfigurerAdapter {
-	public static void main(String[] args) {
-
-		SpringApplication.run(Application.class, args);
-    }  
-} 
+//@ServletComponentScan
+//@EnableWebMvc
+//@SpringBootApplication
+//@MapperScan("com.hjy.miaosha.config.dao")
+//public class Application extends WebMvcConfigurerAdapter {
+//	public static void main(String[] args) {
+//
+//		SpringApplication.run(Application.class, args);
+//    }
+//}

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/order")
 public class OrderController {
@@ -30,7 +32,7 @@ public class OrderController {
     @Autowired
     GoodsService goodsService;
 
-    @RequestMapping(value = "detail", method = RequestMethod.GET)
+    @RequestMapping(value = "/detail", method = RequestMethod.GET)
     @ResponseBody
     public Result<OrderDetailVo> info(User user, @RequestParam("orderId") long orderId) {
         if (user == null) {
@@ -48,4 +50,11 @@ public class OrderController {
         return Result.success(vo);
     }
 
+
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Result<Boolean> delete(@RequestParam("orderId") long orderId) {
+        return Result.success(orderService.deleteOrderById(orderId));
+    }
 }
