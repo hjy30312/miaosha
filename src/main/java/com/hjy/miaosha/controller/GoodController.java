@@ -138,13 +138,4 @@ public class GoodController {
 
 
 
-    @RequestMapping(value = "miaosha/insert", method = RequestMethod.POST)
-    @ResponseBody
-    public Result<String> miaoshaInsert(MiaoshaGoods goods) {
-        boolean flag = goodsService.miaoshaInsert(goods);
-        if (flag) {
-            return Result.success(CodeMsg.MIAOSHA_GOODS_INSETRT_SUCCESS.getMsg());
-        }
-        return Result.error(CodeMsg.MIAOSHA_GOODS_INSESRT_ERROR);
-    }
 }

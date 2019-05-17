@@ -25,9 +25,7 @@ public interface GoodsDao {
             + "#{goodsName}, #{goodsTitle}, #{goodsImg},#{goodsDetail} ,#{goodsPrice},#{goodsStock})")
     int insert(Goods goods);
 
-    @Insert("insert into miaosha_goods(goods_id, miaosha_price,stock_count,start_date,end_date)values("
-            + "#{goodsId},#{miaoshaPrice},#{stockCount},#{startDate},#{endDate})")
-    int miaoshaInsert(MiaoshaGoods goods);
+
 
 
     @Delete("delete from goods where id = #{goodsId}")

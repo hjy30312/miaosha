@@ -1,16 +1,18 @@
 package com.hjy.miaosha.controller.back;
 
 import com.hjy.miaosha.domain.MiaoshaGoods;
-import com.hjy.miaosha.domain.OrderInfo;
 import com.hjy.miaosha.domain.User;
+import com.hjy.miaosha.result.CodeMsg;
+import com.hjy.miaosha.result.Result;
 import com.hjy.miaosha.service.MiaoshaGoodsService;
-import com.hjy.miaosha.service.MiaoshaService;
-import com.hjy.miaosha.service.OrderService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -38,4 +40,23 @@ public class BakcMiaoshaGoodsController {
     }
 
 
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    @ResponseBody
+    public Result<String> insert(MiaoshaGoods goods) {
+        boolean flag = miaoshaGoodsService.insert(goods);
+        if (flag) {
+            return Result.success(CodeMsg.MIAOSHA_GOODS_INSETRT_SUCCESS.getMsg());
+        }
+        return Result.error(CodeMsg.MIAOSHA_GOODS_INSESRT_ERROR);
+    }
+
+    @RequestMapping(value = "/delete")
+    @ResponseBody
+    public Result<String> delete(@RequestParam("id")long id) {
+        boolean flag = miaoshaGoodsService.deleteById(id);
+        if (flag) {
+            return Result.success(CodeMsg.DELETE_SUCCESS.getMsg());
+        }
+        return Result.error(CodeMsg.DELETE_ERROR);
+    }
 }

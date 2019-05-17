@@ -41,10 +41,6 @@ public class GoodsService {
         int flag = goodsDao.insert(goods);
         return flag > 0;
     }
-    public boolean miaoshaInsert(MiaoshaGoods goods) {
-        int flag = goodsDao.miaoshaInsert(goods);
-        return flag > 0;
-    }
 
     public Boolean deleteById(Long goodsId) {
         int flag = goodsDao.deleteGoodsById(goodsId);

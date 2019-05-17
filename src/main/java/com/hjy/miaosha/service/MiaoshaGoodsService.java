@@ -20,4 +20,13 @@ public class MiaoshaGoodsService {
     }
 
 
+    public boolean insert(MiaoshaGoods goods) {
+        int flag = miaoshaGoodsDao.insert(goods);
+        return flag > 0;
+    }
+
+    public boolean deleteById(long id) {
+        int flag = miaoshaGoodsDao.deleteById(id);
+        return flag > 0;
+    }
 }

@@ -11,6 +11,9 @@ public class CodeMsg {
     public static CodeMsg BING_ERROR = new CodeMsg(500101, "参数校验异常： %s");
     public static CodeMsg REQUEST_ILLEGAL = new CodeMsg(500102, "请求非法");
     public static CodeMsg VERIFYCODE_ERROR = new CodeMsg(500102, "验证码错误");
+    public static CodeMsg DELETE_SUCCESS = new CodeMsg(500103, "删除成功");
+    public static CodeMsg DELETE_ERROR = new CodeMsg(500104, "删除失败");
+
 
 
     //登录注册模块 5002XX
