@@ -100,21 +100,6 @@ public class UserService {
     }
 
     /**
-     * 从redis中获取用户信息
-     */
-    public User getByToken(HttpServletResponse response, String token) {
-        if (StringUtils.isEmpty(token)) {
-            return null;
-        }
-        User user = redisService.get(MiaoshaUserKey.token, token, User.class);
-        //延长有效区
-        if (user != null) {
-            addCookie(response, token, user);
-        }
-        return user;
-    }
-
-    /**
      *  1.设置redis缓存，tk+token为key，用户信息为value， 过期时间为2天
      *  2.设置用户浏览器Cookie，"token"为key，token为value。
      * @param response 服务器的响应
@@ -129,6 +114,23 @@ public class UserService {
         cookie.setPath("/");
         response.addCookie(cookie);
     }
+
+    /**
+     * 从redis中获取用户信息
+     */
+    public User getByToken(HttpServletResponse response, String token) {
+        if (StringUtils.isEmpty(token)) {
+            return null;
+        }
+        User user = redisService.get(MiaoshaUserKey.token, token, User.class);
+        //延长有效区
+        if (user != null) {
+            addCookie(response, token, user);
+        }
+        return user;
+    }
+
+
 
     @Transactional
     public String register(LoginVo user) {

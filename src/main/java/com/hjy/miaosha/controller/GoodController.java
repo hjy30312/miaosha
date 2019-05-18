@@ -1,18 +1,13 @@
 package com.hjy.miaosha.controller;
 
-import com.hjy.miaosha.domain.Goods;
-import com.hjy.miaosha.domain.MiaoshaGoods;
 import com.hjy.miaosha.domain.User;
-import com.hjy.miaosha.redis.GoodsKey;
 import com.hjy.miaosha.redis.RedisService;
-import com.hjy.miaosha.result.CodeMsg;
 import com.hjy.miaosha.result.Result;
 import com.hjy.miaosha.service.GoodsService;
 import com.hjy.miaosha.service.UserService;
 import com.hjy.miaosha.vo.GoodsDetailVo;
 import com.hjy.miaosha.vo.GoodsVo;
 import lombok.extern.java.Log;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -21,8 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.thymeleaf.context.IWebContext;
-import org.thymeleaf.context.WebContext;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,26 +49,13 @@ public class GoodController {
      * 3。数据渲染html
      */
     @RequestMapping(value = "/to_list", produces = "text/html")
-    @ResponseBody
     public String list(HttpServletRequest request, HttpServletResponse response,
                        Model model, User user) {
         model.addAttribute("user",user);
-        // 取缓存
-        String html = redisService.get(GoodsKey.getGoodsList, "", String.class);
-        if (!StringUtils.isEmpty(html)) {
-            return html;
-        }
         // 查询商品列表
         List<GoodsVo> goodVoList =  goodsService.listGoodsVo();
         model.addAttribute("goodsList", goodVoList);
-         // return "goods_list";
-        IWebContext ctx = new WebContext(request,response,  request.getServletContext(),request.getLocale(), model.asMap());
-        //手动渲染
-        html = thymeleafViewResolver.getTemplateEngine().process("index1",ctx);
-        if (!StringUtils.isEmpty(html)) {
-            redisService.set(GoodsKey.getGoodsList, "" , html);
-        }
-        return html;
+        return "index1";
     }
 
     @RequestMapping(value = "/to_search_list")

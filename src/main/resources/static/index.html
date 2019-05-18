@@ -29,8 +29,16 @@
             <div class="leftArea">
                 <a href="#" class="collection">收藏慕课</a>
             </div>
-            <div class="rightArea">
-                欢迎来到慕课网！<a href="#">[登入]</a> <a href="#">[免费注册]</a>
+            <div th:if ="${user} == null">
+                <div class="rightArea">
+                    欢迎来到慕课网！<a href="#">[登入]</a> <a href="#">[免费注册]</a>
+                </div>
+            </div>
+            <div th:if ="${user} != null">
+                <div class="rightArea">
+                    欢迎来到慕课网！<a href="#"><td th:text="${user.nickname}"></td></a>
+                    <a href="#">我的订单</a>
+                </div>
             </div>
         </div>
     </div>
