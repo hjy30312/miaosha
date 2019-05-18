@@ -43,6 +43,7 @@ public class BakcMiaoshaGoodsController {
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     @ResponseBody
     public Result<String> insert(MiaoshaGoods goods) {
+        log.info(goods.toString());
         boolean flag = miaoshaGoodsService.insert(goods);
         if (flag) {
             return Result.success(CodeMsg.MIAOSHA_GOODS_INSETRT_SUCCESS.getMsg());

@@ -70,5 +70,8 @@ public class BackGoodController {
     @ResponseBody
     public Result<Boolean> deleteGoodsById(@PathVariable("goodsId")Long goodsId){
         return Result.success(goodsService.deleteById(goodsId));
+
+
+
     }
 }
