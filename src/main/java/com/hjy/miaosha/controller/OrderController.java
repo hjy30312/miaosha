@@ -10,8 +10,10 @@ import com.hjy.miaosha.service.OrderService;
 import com.hjy.miaosha.service.UserService;
 import com.hjy.miaosha.vo.GoodsVo;
 import com.hjy.miaosha.vo.OrderDetailVo;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +23,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/order")
+@Log
 public class OrderController {
 
     @Autowired
@@ -57,4 +60,21 @@ public class OrderController {
     public Result<Boolean> delete(@RequestParam("orderId") long orderId) {
         return Result.success(orderService.deleteOrderById(orderId));
     }
+
+    @RequestMapping(value = "/list_by_id", method = RequestMethod.POST)
+    public String list(User user, Model model) {
+        if (user == null) {
+            //return "login";
+            return "user_index";
+        }
+        //List<OrderInfo>  orderInfos = orderService.getOrderListByUserId(user.getId());
+
+        List<OrderInfo>  orderInfos = orderService.getOrderListByUserId(Long.parseLong("18772842517"));
+        model.addAttribute("orderInfos",orderInfos);
+        for (OrderInfo orderInfo:orderInfos) {
+            log.info(orderInfo.toString());
+        }
+        return "user_index";
+    }
+
 }

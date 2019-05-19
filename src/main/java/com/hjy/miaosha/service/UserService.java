@@ -74,7 +74,7 @@ public class UserService {
     }
 
 
-    public String login(HttpServletResponse response, LoginVo loginVo) {
+    public User login(HttpServletResponse response, LoginVo loginVo) {
         if (loginVo == null) {
             throw new GlobalException(CodeMsg.SERVER_ERROR);
         }
@@ -96,7 +96,7 @@ public class UserService {
         //生成cookie
         String token = UUIDUtil.uuid();
         addCookie(response, token, user);
-        return token;
+        return user;
     }
 
     /**

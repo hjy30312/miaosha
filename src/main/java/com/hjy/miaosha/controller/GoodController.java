@@ -55,7 +55,7 @@ public class GoodController {
         // 查询商品列表
         List<GoodsVo> goodVoList =  goodsService.listGoodsVo();
         model.addAttribute("goodsList", goodVoList);
-        return "index1";
+        return "user_index";
     }
 
     @RequestMapping(value = "/to_search_list")
@@ -66,11 +66,6 @@ public class GoodController {
         model.addAttribute("goodsList", goodVoList);
         return "goods_list";
     }
-
-
-
-
-
 
     /**
      * 页面静态化
@@ -114,8 +109,5 @@ public class GoodController {
     public Result<Boolean> deleteGoodsById(@PathVariable("goodsId")Long goodsId){
         return Result.success(goodsService.deleteById(goodsId));
     }
-
-
-
 
 }

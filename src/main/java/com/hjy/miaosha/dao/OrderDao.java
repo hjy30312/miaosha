@@ -29,4 +29,7 @@ public interface OrderDao {
 
     @Delete("delete from order_info where id = #{orderId}")
     int deleteOrderById(@Param("orderId")long id);
+
+    @Select("select * from order_info where user_id = #{userId}")
+    List<OrderInfo> getOrderInfoListByUserId(@Param("userId")Long userId);
 }

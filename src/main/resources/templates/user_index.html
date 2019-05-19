@@ -29,16 +29,16 @@
     <div class="topBar">
         <div class="comWidth">
             <div class="leftArea">
-                <a href="#" class="collection">收藏慕课</a>
+                <a href="#" class="collection">收藏清清秒杀</a>
             </div>
             <div th:if ="${user} == null">
                 <div class="rightArea">
-                    欢迎来到慕课网！<a href="#">[登入]</a> <a href="#">[免费注册]</a>
+                    欢迎来到清清秒杀！<a href="#">[登入]</a> <a href="#">[免费注册]</a>
                 </div>
             </div>
             <div th:if ="${user} != null">
                 <div class="rightArea">
-                    欢迎来到慕课网！<a href="#"><td th:text="${user.nickname}"></td></a>
+                    欢迎来到清清秒杀！<a href="#"><td th:text="${user.nickname}"></td></a>
                     <a href="#">我的订单</a>
                 </div>
             </div>
@@ -47,7 +47,7 @@
     <div class="logoBar">
         <div class="comWidth">
             <div class="logo fl">
-                <a href="#"><img th:src="@{/images/icon/慕课网.png}" alt="慕课网"  /></a>
+                <a href="#"><img th:src="@{/img/huat.png}" width="100" height="60" alt="清清秒杀"/></a>
             </div>
             <div class="search_box fl">
                 <input type="text" class="search_text fl" />
@@ -86,8 +86,8 @@
     <div class="col-md-2"></div>
 </div>
 <div class="footer">
-    <p><a href="#">慕课简介</a><i>|</i><a href="#">慕课公告</a><i>|</i><a href="#">招纳贤士</a><i>|</i><a href="#">联系我们</a><i>|</i>客服热线：400-675-1234</p>
-    <p>Copyright&copy;2006 - 2014 慕课版权所有&nbsp;&nbsp;&nbsp;京ICP备09037834号&nbsp;&nbsp;&nbsp;京ICP证B1034-8373号&nbsp;&nbsp;&nbsp;某市公安局XX分局备案编号：123456789123</p>
+    <p><a href="#">清清秒杀简介</a><i>|</i><a href="#">清清秒杀公告</a><i>|</i><a href="#">招纳贤士</a><i>|</i><a href="#">联系我们</a><i>|</i>客服热线：400-675-1234</p>
+    <p>Copyright&copy;2006 - 2014 清清秒杀版权所有&nbsp;&nbsp;&nbsp;京ICP备09037834号&nbsp;&nbsp;&nbsp;京ICP证B1034-8373号&nbsp;&nbsp;&nbsp;某市公安局XX分局备案编号：123456789123</p>
 
     <p class="web"><a href="#"><img th:src="@{/images/footer.gif}" alt="logo"  /></a><a href="#"><img th:src="@{/images/footer.gif}"  /></a><a href="#"><img th:src="@{/images/footer.gif}"  /></a><a href="#"><img th:src="@{/images/footer.gif}"  /></a></p>
 </div>

@@ -74,4 +74,8 @@ public class OrderService {
         return false;
     }
 
+    public List<OrderInfo> getOrderListByUserId(long userId) {
+        return orderDao.getOrderInfoListByUserId(userId);
+
+    }
 }

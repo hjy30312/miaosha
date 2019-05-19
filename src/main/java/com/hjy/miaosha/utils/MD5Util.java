@@ -11,11 +11,22 @@ public class MD5Util {
 
    private static final String salt = "1a2b3c4d";
 
+    /**
+     * 前端输入的
+     * @param inputPass
+     * @return
+     */
     public static String inputPassToFormPass(String inputPass) {
         String str = "" + salt.charAt(0) + salt.charAt(2) + inputPass + salt.charAt(5);
         return md5(str);
     }
 
+    /**
+     * 传到后端的
+     * @param formPass
+     * @param salt
+     * @return
+     */
     public static String formPassToDBPass(String formPass, String salt) {
         String str = "" + salt.charAt(0) + salt.charAt(2) + formPass + salt.charAt(5);
         return md5(str);
@@ -29,9 +40,8 @@ public class MD5Util {
 
     public static void main(String[] args) {
         System.out.println(inputPassToFormPass("123456"));
-        String formPass = inputPassToDbPass("123456",salt);
-        //System.out.println(formPassToDBPass("1923f6978471aea7f9d918db4fa10e59", salt));
-        System.out.println(formPass);
+        String DbPass = inputPassToDbPass("123456",salt);
+        System.out.println(DbPass);
     }
 
 }
